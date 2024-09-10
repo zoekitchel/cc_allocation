@@ -13,28 +13,36 @@ indir <- "data/cva/raw"
 outdir <- "data/cva/processed"
 plotdir <- "figures"
 
-# Read data
+# Read non-Pacific
 data_ne <- readRDS(file.path(indir, "northeast/Hare_etal_2016_cva.Rds")) %>% mutate(region="Northeast")
 data_sa <- readRDS(file.path(indir, "gulf_of_mexico/Quinlan_etal_2023_cva.Rds")) %>% mutate(region="Gulf of Mexico")
 data_gom <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) %>% mutate(region="South Atlantic")
 data_np <- readRDS(file.path(indir, "north_pacific/Spencer_etal_2019_cva.Rds")) %>% mutate(region="North Pacific")
-data_pac <- readRDS(file.path(indir, "pacific/McClure_etal_2023_cva.Rds")) %>% mutate(region="Pacific")
 data_wp <- readRDS(file.path(indir, "western_pacific/Giddens_etal_2022_cva.Rds")) %>% mutate(region="Western Pacific")
 
+# Read Pacific
+data_pac <- readRDS(file.path(indir, "pacific/McClure_etal_2023_cva.Rds")) %>% 
+  mutate(region="Pacific") %>% 
+  filter(functional_group!="Salmon")
+
+# Read Pacific salmon
+data_pac_salmon <- readxl::read_excel(file.path(indir, "pacific_salmon/Crozier_etal_2019_tables.xlsx")) %>% 
+  mutate(region="Pacific salmon",
+         functional_group=comm_name,
+         comm_name=paste(stock, comm_name, sep="-"))
+
 # Things to do:
-# 1. Add Pacific salmon
-# 2. Harmonize functional groups
-# 3. Distribution shift, directional shift, sub-scores
+# 1. Add Distribution shift, directional shift, sub-scores, etc.
 
 
 # Build data
 ################################################################################
 
 # Merge data
-data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_pac, data_wp) %>% 
+data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_pac_salmon) %>% 
   # Arrange
   select(region, functional_group, comm_name, species, 
-         vulnerability, sensitivity, exposure, everything()) %>% 
+         vulnerability, sensitivity, exposure) %>% 
   # Format scores
   mutate(exposure=factor(exposure, levels=c("Low", "Moderate", "High", "Very high")),
          sensitivity=factor(sensitivity, levels=c("Low", "Moderate", "High", "Very high")),
@@ -43,14 +51,30 @@ data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_pac, data_wp) %>%
   mutate(functional_group=stringr::str_to_sentence(functional_group),
          functional_group=recode(functional_group,
                                  "Invertebrate"="Invertebrates",
+                                 "Cephalopod"="Cephalopods",
                                  "Coastal"="Coastal pelagics",
                                  "Coastal pelagic"="Coastal pelagics",
                                  "Coastal pelagic fish"="Coastal pelagics",
+                                 "Coastal pelagic species"="Coastal pelagics",
+                                 "Coral reef jegs"="Coral reef JEGS",
+                                 "Crab"="Crabs",
+                                 "Deep slope"="Deep-slope fish",
                                  "Diadromous"="Diadromous fish",
                                  "Elasmobranch"="Elasmobranchs",
+                                 "Forage"="Forage fish",
+                                 "Forage fishes"="Forage fish",
+                                 "Gadid"="Gadids",
+                                 "Grenadier"="Grenadiers",
                                  "Groundish"="Groundfish",
+                                 "Grouper"="Groupers",
+                                 "Other anadromous"="Other anadromous fish",
+                                 "Other coral reef"="Other coral reef fish",
                                  "Pelagic"="Pelagic fish",
-                                 "Pelagics"="Pelagic fish")) %>% 
+                                 "Pelagics"="Pelagic fish",
+                                 "Sallmon"="Salmons",
+                                 "Sculpin"="Sculpins",
+                                 "Shark"="Sharks",
+                                 "Snapper"="Snappers" )) %>% 
   # Format species
   mutate(species=recode(species,
                         "Reinhardtius stomias"="Atheresthes stomias",
@@ -93,7 +117,11 @@ data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_pac, data_wp) %>%
 
 # Inspect
 freeR::complete(data)
+
+# Region
 table(data$region)
+
+# Functional group
 table(data$functional_group) # could improve
 
 # Scores
@@ -105,7 +133,7 @@ table(data$sensitivity)
 spp_key <- data %>% 
   count(comm_name, species)
 freeR::which_duplicated(spp_key$comm_name)
-freeR::which_duplicated(spp_key$species)
+freeR::which_duplicated(spp_key$species) # FINE: Oncorhynchus spp, Paralithodes camtschaticus, Sebastes paucispinis, Sebastes pinniger
 
 freeR::check_names(spp_key$species) # Nicholsina usta, Palola viridis are both correct
 
@@ -123,7 +151,7 @@ stats <- data %>%
   ungroup() %>% 
   mutate(region=factor(region,
                        levels=c("Northeast", "South Atlantic", "Gulf of Mexico",
-                                "Pacific", "North Pacific", "Western Pacific")))
+                                "Pacific", "Pacific salmon", "North Pacific", "Western Pacific")))
 
 # Plot
 ggplot(stats, aes(y=functional_group, x=prop, fill=vulnerability)) +
@@ -134,7 +162,7 @@ ggplot(stats, aes(y=functional_group, x=prop, fill=vulnerability)) +
   scale_x_continuous(labels=scales::percent_format()) +
   # Legend
   scale_fill_manual(name="Vulnerability",
-                    values=RColorBrewer::brewer.pal(4, "YlOrRd")) +
+                    values=RColorBrewer::brewer.pal(4, "Spectral") %>% rev()) +
   # Theme
   theme_bw()
 
