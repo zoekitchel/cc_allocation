@@ -1,0 +1,52 @@
+﻿council_label,council_lead,fmp_label,fmp,Reg1,Reg2
+Atlantic HMS,Atlantic HMS,Consolidated Atlantic HMS,Consolidated Atlantic Highly Migratory Species,NA,NA
+Caribbean,CFMC,Puerto Rico,Comprehensive FMP for Puerto Rico in the EEZ,NA,NA
+Caribbean,CFMC,St. Croix,Comprehensive FMP for St. Croix in the EEZ,NA,NA
+Caribbean,CFMC,St. Thomas/St. John,Comprehensive FMP for St. Thomas / St. John in the EEZ,NA,NA
+Caribbean,CFMC,Puerto Rico/St. Croix/\nSt. Thomas/St. John,Comprehensive FMP for Puerto Rico in the EEZ/Comprehensive FMP for St. Croix in the EEZ/Comprehensive FMP for St. Thomas / St. John in the EEZ,NA,NA
+Caribbean,CFMC,Puerto Rico,Puerto Rico Fishery Management Plan,NA,NA
+Caribbean,CFMC,St. Croix,St. Croix Fishery Management Plan,NA,NA
+Caribbean,CFMC,St. Thomas/St. John,St. Thomas and St. John Fishery Management Plan,NA,NA
+Gulf of Mexico,GMFMC,Coral,Coral and Coral Reefs of the Gulf of Mexico,GMEX,NA
+Gulf of Mexico,GMFMC,Reef Fish Resources,Reef Fish Resources of the Gulf of Mexico,GMEX,NA
+Gulf of Mexico,GMFMC,Shrimp,Shrimp Fishery of the Gulf of Mexico,GMEX,NA
+Gulf of Mexico,GMFMC,Spiny Lobster,Spiny Lobster in the Gulf of Mexico and South Atlantic,GMEX,SEUS
+Gulf of Mexico,GMFMC,Red Drum,Red Drum Fishery of the Gulf of Mexico,GMEX,NA
+,IPHC,Pacific Halibut,Pacific Halibut Catch Sharing Plan,NA,NA
+Mid-Atlantic,MAFMC,Atlantic Surfclam\nOcean Quahog,Atlantic Surfclam and Ocean Quahog,NEUS,NA
+Mid-Atlantic,MAFMC,Tilefish,Tilefish,NEUS,NA
+Mid-Atlantic,MAFMC,"Summer Flounder,\nScup and\nBlack Sea Bass","Summer Flounder, Scup and Black Sea Bass",NEUS,NA
+Mid-Atlantic,MAFMC,"Mackerel, Squid\nand Butterfish","Mackerel, Squid and Butterfish",NEUS,NA
+Mid-Atlantic,MAFMC,Bluefish,Bluefish,NEUS,NA
+Mid-Atlantic,MAFMC,Spiny Dogfish,Spiny Dogfish,NEUS,NA
+New England,NEFMC,Northeast Skate\nComplex,Northeast Skate Complex,NEUS,NA
+New England,NEFMC,Northeast\nMultispecies,Northeast Multispecies,NEUS,NA
+New England,NEFMC,Deep-Sea Red Crab,Deep-Sea Red Crab,NEUS,NA
+New England,NEFMC,Atlantic Herring,Atlantic Herring,NEUS,NA
+New England,NEFMC,Monkfish,Monkfish,NEUS,NA
+New England,NEFMC,Northeast small-mesh\nMultispecies,Northeast small-mesh Multispecies,NEUS,NA
+New England,NEFMC,Atlantic Sea Scallop,Atlantic Sea Scallop,NEUS,NA
+New England,NEFMC,Atlantic Salmon,Atlantic Salmon,NEUS,NA
+North Pacific,NPFMC,Groundfish BSAI/GOA,Groundfish of the Bering Sea and Aleutian Islands Management Area / Groundfish of the Gulf of Alaska,EBS,GOA
+North Pacific,NPFMC,Groundfish BSAI,Groundfish of the Bering Sea and Aleutian Islands Management Area,EBS,NA
+North Pacific,NPFMC,Groundfish GOA,Groundfish of the Gulf of Alaska,GOA,NA
+North Pacific,NPFMC,Arctic Fish Resources,Fish Resources of the Arctic Management Area,EBS,NA
+North Pacific,NPFMC,King and Tanner Crabs,Bering Sea/Aleutian Islands King and Tanner Crabs,EBS,NA
+North Pacific,NPFMC,Salmon,Salmon Fisheries in the EEZ off the Coast of Alaska,GOA,EBS
+North Pacific,NPFMC,Scallop,Scallop Fishery off Alaska,GOA,EBS
+Pacific HMS,Pacific HMS,Pacific HMS,U.S. West Coast Fisheries for Highly Migratory Species / Pacific Pelagic Fisheries of the Western Pacific Region Ecosystem,NA,NA
+Pacific,PFMC,Groundfish,Pacific Coast Groundfish,West_USA,NA
+Pacific,PFMC,Coastal Pelagic,Coastal Pelagic Species,West_USA,NA
+Pacific,PFMC,Salmon,Pacific Coast Salmon,West_USA,NA
+South Atlantic,SAFMC,Dolphin and Wahoo,Dolphin and Wahoo Fishery of the Atlantic,SEUS,NA
+South Atlantic,SAFMC,Coral/Habitat,"Coral, Coral Reefs and Live/Hard Bottom Habitats of the South Atlantic Region",SEUS,NA
+South Atlantic,SAFMC,Snapper-Grouper,Snapper-Grouper Fishery of the South Atlantic Region,SEUS,NA
+South Atlantic,SAFMC,Golden Crab,Golden Crab Fishery of the South Atlantic Region,SEUS,NA
+South Atlantic,SAFMC,Snapper-Grouper SA/\nReef Fish GMEX,Snapper-Grouper Fishery of the South Atlantic Region / Reef Fish Resources of the Gulf of Mexico,SEUS,GMEX
+South Atlantic,SAFMC,Shrimp,Shrimp Fishery of the South Atlantic Region,SEUS,NA
+South Atlantic,SAFMC,Coastal Migratory\nPelagic,Coastal Migratory Pelagic Resources of the Gulf of Mexico and South Atlantic,SEUS,GMEX
+West Pacific,WPFMC,Pelagic,Pacific Pelagic Fisheries of the Western Pacific Region Ecosystem,NA,NA
+West Pacific,WPFMC,Hawaii Ecosystem,Hawaii Archipelago Ecosystem,NA,NA
+West Pacific,WPFMC,Pacific Remote\nIsland Ecosystem,Pacific Remote Island Areas Ecosystem,NA,NA
+West Pacific,WPFMC,American Samoa\nEcosystem,American Samoa Archipelago Ecosystem,NA,NA
+West Pacific,WPFMC,Mariana Ecosystem,Mariana Archipelago Ecosystem,NA,NA

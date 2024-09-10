@@ -1,4 +1,4 @@
-﻿0,Species,genus,devPA,devBiom,Region,RCP,Uncert.,Shift,sd_shift,%Hab.,sd_hab
+﻿0,Genus,species,devPA,devBiom,Region,RCP,Uncert.,Shift,sd_shift,%Hab.,sd_hab
 1,acanthephyra,pelagica,0.68,0.9,East_canada,26,medium,164.7,124.6,13.1,20.3
 2,acanthephyra,pelagica,0.68,0.9,East_canada,85,low,437.6,150.2,10.6,42.7
 3,acanthephyra,pelagica,0.68,0.9,GMEX,26,low,297.5,147.9,-77.6,14.5
