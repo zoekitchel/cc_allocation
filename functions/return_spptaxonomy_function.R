@@ -79,8 +79,7 @@ missing_salt <- alphaid %>%
   dplyr::filter(is.na(isMarine) | isMarine != 1) %>% 
   dplyr::select(-isMarine) # we don't really need this 
 
-fishbase_id <- data.frame(taxa = worms_db$taxa) %>% 
-  dplyr::mutate(SpecCode = NA)
+fishbase_id <- data.frame(taxa = worms_db$taxa)
 
 # Final clean output data frame
 fishbase_id <- unique(fishbase_id)
@@ -90,7 +89,6 @@ output_df <- dplyr::left_join(worms_db, fishbase_id, by = "taxa") %>%
   dplyr::select(
     query,
     worms_id = AphiaID,
-    SpecCode,
     everything()
   )
 
