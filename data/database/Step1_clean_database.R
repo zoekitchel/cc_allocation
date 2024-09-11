@@ -60,7 +60,8 @@ data <- data_orig %>%
                              "no-no-no"="none", 
                              "no-no-yes"="area", 
                              "no-yes-no"="state", 
-                             "yes-no-no"="country")) %>% 
+                             "yes-no-no"="country",
+                             "yes-no-yes"="country-area")) %>% 
   # Add sector columns
   mutate(sector_yn=ifelse(!is.na(sector_list), "yes", "no"),
          sector_n=count_items(sector_list)) %>%  

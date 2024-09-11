@@ -115,7 +115,7 @@ spp_key <- data %>%
 freeR::check_names(spp_key$species)
 
 # Lookup names
-names < freeR::fb_comm_name(spp_key$species)
+#names < freeR::fb_comm_name(spp_key$species)
 
 
 # Export data
