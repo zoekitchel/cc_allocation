@@ -82,7 +82,7 @@ data_sum <- data %>%
   left_join(fmp_short_key %>% select("fmp", "fmp_short"), by="fmp") %>% 
   # Recode council
   mutate(council=recode_factor(council,
-                               "NEFMC"="Northeast",
+                               "NEFMC"="New\nEngland",
                                "MAFMC"="Mid-Atlantic",
                                "SAFMC"="South\nAtlantic", 
                                "GFMC"="Gulf of\nMexico",
