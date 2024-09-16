@@ -14,20 +14,31 @@ outdir <- "data/cva/processed"
 plotdir <- "figures"
 
 # Read non-Pacific
-data_ne <- readRDS(file.path(indir, "northeast/Hare_etal_2016_cva.Rds")) %>% mutate(region="Northeast")
-data_sa <- readRDS(file.path(indir, "gulf_of_mexico/Quinlan_etal_2023_cva.Rds")) %>% mutate(region="Gulf of Mexico")
-data_gom <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) %>% mutate(region="South Atlantic")
-data_np <- readRDS(file.path(indir, "north_pacific/Spencer_etal_2019_cva.Rds")) %>% mutate(region="North Pacific")
-data_wp <- readRDS(file.path(indir, "western_pacific/Giddens_etal_2022_cva.Rds")) %>% mutate(region="Western Pacific")
+data_ne <- readRDS(file.path(indir, "northeast/Hare_etal_2016_cva.Rds")) %>% 
+  mutate(reference="Hare et al. 2016",
+         region="Northeast")
+data_sa <- readRDS(file.path(indir, "gulf_of_mexico/Quinlan_etal_2023_cva.Rds")) %>% 
+  mutate(reference="Quinlan et al. 2023",
+         region="Gulf of Mexico")
+data_gom <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) %>% 
+  mutate(reference="Burton et al. 2023",
+         region="South Atlantic")
+data_np <- readRDS(file.path(indir, "north_pacific/Spencer_etal_2019_cva.Rds")) %>% 
+  mutate(reference="Spencer et al. 2019",
+         region="North Pacific")
+data_wp <- readRDS(file.path(indir, "western_pacific/Giddens_etal_2022_cva.Rds")) %>% 
+  mutate(reference="Giddens et al. 2022",
+         region="Western Pacific")
 
 # Read Pacific
 data_pac <- readRDS(file.path(indir, "pacific/McClure_etal_2023_cva.Rds")) %>% 
-  mutate(region="Pacific") %>% 
-  filter(functional_group!="Salmon")
+  mutate(reference="McClure et al. 2023",
+         region="Pacific")
 
 # Read Pacific salmon
 data_pac_salmon <- readxl::read_excel(file.path(indir, "pacific_salmon/Crozier_etal_2019_tables.xlsx")) %>% 
-  mutate(region="Pacific salmon",
+  mutate(reference="Crozier et al. 2019",
+         region="Pacific salmon",
          functional_group=comm_name,
          comm_name=paste(stock, comm_name, sep="-"))
 
@@ -41,7 +52,7 @@ data_pac_salmon <- readxl::read_excel(file.path(indir, "pacific_salmon/Crozier_e
 # Merge data
 data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_pac_salmon) %>% 
   # Arrange
-  select(region, functional_group, comm_name, species, 
+  select(reference, region, functional_group, comm_name, species, 
          vulnerability, sensitivity, exposure) %>% 
   # Format scores
   mutate(exposure=factor(exposure, levels=c("Low", "Moderate", "High", "Very high")),
@@ -153,8 +164,29 @@ stats <- data %>%
                        levels=c("Northeast", "South Atlantic", "Gulf of Mexico",
                                 "Pacific", "Pacific salmon", "North Pacific", "Western Pacific")))
 
+
+# Plot data
+################################################################################
+
+# Setup theme
+my_theme <-  theme(axis.text=element_text(size=8),
+                   axis.title=element_text(size=9),
+                   legend.text=element_text(size=8),
+                   legend.title=element_text(size=9),
+                   strip.text=element_text(size=8),
+                   plot.title=element_text(size=9),
+                   # Gridlines
+                   panel.grid.major = element_blank(), 
+                   panel.grid.minor = element_blank(),
+                   panel.background = element_blank(), 
+                   axis.line = element_line(colour = "black"),
+                   # Legend
+                   legend.key = element_rect(fill = NA, color=NA),
+                   legend.background = element_rect(fill=alpha('blue', 0)))
+
+
 # Plot
-ggplot(stats, aes(y=functional_group, x=prop, fill=vulnerability)) +
+g <- ggplot(stats, aes(y=functional_group, x=prop, fill=vulnerability)) +
   facet_grid(region~., space="free_y", scales="free_y") +
   geom_bar(stat="identity", color="grey30", lwd=0.2) +
   # Labels
@@ -164,7 +196,12 @@ ggplot(stats, aes(y=functional_group, x=prop, fill=vulnerability)) +
   scale_fill_manual(name="Vulnerability",
                     values=RColorBrewer::brewer.pal(4, "Spectral") %>% rev()) +
   # Theme
-  theme_bw()
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename="data/cva/cva_scores.png", 
+       width=6.5, height=7, units="in", dpi=600)
 
 
 # Export data

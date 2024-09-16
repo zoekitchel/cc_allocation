@@ -92,7 +92,11 @@ data <- data_orig %>%
          season_yn, season_n, season_list, season_yrs, season_notes,
          everything()) %>% 
   # Remove useless
-  select(-c(completed_by, QC_by))
+  select(-c(completed_by, QC_by)) %>% 
+  # Format species
+  mutate(species=recode(species, 
+                        "Macrozoarces americanus"="Zoarces americanus",
+                        "Coryphaena hippurus, Coryphaena hippurus"="Coryphaena hippurus"))
 
 # Inspect
 freeR::complete(data)
