@@ -17,10 +17,10 @@ plotdir <- "figures"
 data_ne <- readRDS(file.path(indir, "northeast/Hare_etal_2016_cva.Rds")) %>% 
   mutate(reference="Hare et al. 2016",
          region="Northeast")
-data_sa <- readRDS(file.path(indir, "gulf_of_mexico/Quinlan_etal_2023_cva.Rds")) %>% 
+data_gom <- readRDS(file.path(indir, "gulf_of_mexico/Quinlan_etal_2023_cva.Rds")) %>% 
   mutate(reference="Quinlan et al. 2023",
          region="Gulf of Mexico")
-data_gom <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) %>% 
+data_sa <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) %>% 
   mutate(reference="Burton et al. 2023",
          region="South Atlantic")
 data_np <- readRDS(file.path(indir, "north_pacific/Spencer_etal_2019_cva.Rds")) %>% 
@@ -43,8 +43,8 @@ data_pac_salmon <- readxl::read_excel(file.path(indir, "pacific_salmon/Crozier_e
          comm_name=paste(stock, comm_name, sep="-"))
 
 # Things to do:
-# 1. Add Distribution shift, directional shift, sub-scores, etc.
-
+# Make sub-score database
+# Dir/Dist: North Pacific, Western Pacific, Pacific salmon
 
 # Build data
 ################################################################################
@@ -53,11 +53,12 @@ data_pac_salmon <- readxl::read_excel(file.path(indir, "pacific_salmon/Crozier_e
 data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_pac_salmon) %>% 
   # Arrange
   select(reference, region, functional_group, comm_name, species, 
-         vulnerability, sensitivity, exposure) %>% 
+         vulnerability, sensitivity, exposure, dir_effect, dist_change) %>% 
   # Format scores
   mutate(exposure=factor(exposure, levels=c("Low", "Moderate", "High", "Very high")),
          sensitivity=factor(sensitivity, levels=c("Low", "Moderate", "High", "Very high")),
-         vulnerability=factor(vulnerability, levels=c("Low", "Moderate", "High", "Very high"))) %>% 
+         vulnerability=factor(vulnerability, levels=c("Low", "Moderate", "High", "Very high")),
+         dist_change=factor(dist_change, levels=c("Low", "Moderate", "High", "Very high"))) %>% 
   # Format functional group
   mutate(functional_group=stringr::str_to_sentence(functional_group),
          functional_group=recode(functional_group,
@@ -128,6 +129,10 @@ data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_p
 
 # Inspect
 freeR::complete(data)
+data %>% 
+  group_by(region) %>% 
+  summarize(dir=sum(is.na(dir_effect)),
+            dist=sum(is.na(dist_change)))
 
 # Region
 table(data$region)
@@ -139,6 +144,8 @@ table(data$functional_group) # could improve
 table(data$vulnerability)
 table(data$exposure)
 table(data$sensitivity)
+table(data$dir_effect)
+table(data$dist_change)
 
 # Species key
 spp_key <- data %>% 

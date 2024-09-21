@@ -1,0 +1,88 @@
+
+# Clear workspace
+rm(list = ls())
+
+# Setup
+################################################################################
+
+# Packages
+library(tidyverse)
+library(lubridate)
+
+# Directories
+datadir <- "data/database/processed"
+plotdir <- "figures"
+
+# Read data
+data_orig <- readxl::read_excel(file.path(datadir, "season_allocation_database.xlsx"))
+
+
+# Build data
+################################################################################
+
+# Format data
+data <- data_orig %>% 
+  # Format date
+  mutate(start=lubridate::ymd(start),
+         end=lubridate::ymd(end)) %>% 
+  # Calculate midpoint
+  mutate(midpoint = as.Date((as.numeric(start) + as.numeric(end)) / 2, origin = "1970-01-01")) %>% 
+  # Label
+  mutate(percent_label=paste0(percent*100, "%")) %>% 
+  # Arrange
+  arrange(council, fmp, species) %>% 
+  mutate(order=1:n())
+  
+
+
+
+# Plot data
+################################################################################
+
+# Theme
+my_theme <-  theme(axis.text=element_text(size=6),
+                   axis.title=element_text(size=7),
+                   axis.title.y=element_blank(),
+                   legend.text=element_text(size=6),
+                   legend.title=element_text(size=7),
+                   strip.text=element_text(size=6),
+                   plot.tag = element_text(size=7),
+                   # Gridlines
+                   panel.grid.major = element_blank(), 
+                   panel.grid.minor = element_blank(),
+                   panel.background = element_blank(), 
+                   axis.line = element_line(colour = "black"),
+                   # Legend
+                   legend.background = element_rect(fill=alpha('blue', 0)))
+
+# Plot data
+g <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end, 
+                              linewidth=percent, color=percent)) + 
+  facet_grid(council~., space="free_y", scales="free_y") +
+  geom_segment() +
+  # Add text
+  # geom_text(mapping=aes(y=species, x=midpoint, label=percent_label), inherit.aes = F,
+  #           color="black", size=2.2) +
+  # Axis
+  scale_x_date(breaks = seq(as.Date("2023-01-01"), as.Date("2025-01-01"), by = "3 months"),
+               date_label = "%b") +
+  # Legend
+  scale_linewidth_continuous(name="% of quota", labels=scales::percent_format()) +
+  scale_color_gradientn(name="% of quota", 
+                        colors=RColorBrewer::brewer.pal(9, "Spectral") %>% rev(),
+                        labels=scales::percent_format()) +
+  guides(color = guide_colorbar(ticks.colour = "black", frame.colour = "black", frame.linewidth = 0.2)) +
+  # Labels
+  labs(x="", y="") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigX_seasonal_allocations.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+
+
+
