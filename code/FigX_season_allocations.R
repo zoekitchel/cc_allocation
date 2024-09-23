@@ -22,6 +22,12 @@ data_orig <- readxl::read_excel(file.path(datadir, "season_allocation_database.x
 
 # Format data
 data <- data_orig %>% 
+  # Factor council
+  mutate(council=recode_factor(council, 
+                               "New England"="New England", 
+                               "Mid-Atlantic"="MA", 
+                               "South Atlantic"="SA", 
+                               "Pacific"="P")) %>% 
   # Format date
   mutate(start=lubridate::ymd(start),
          end=lubridate::ymd(end)) %>% 
@@ -31,7 +37,7 @@ data <- data_orig %>%
   mutate(percent_label=paste0(percent*100, "%")) %>% 
   # Arrange
   arrange(council, fmp, species) %>% 
-  mutate(order=1:n())
+  mutate(order=1:n()) 
   
 
 
@@ -48,7 +54,7 @@ my_theme <-  theme(axis.text=element_text(size=6),
                    strip.text=element_text(size=6),
                    plot.tag = element_text(size=7),
                    # Gridlines
-                   panel.grid.major = element_blank(), 
+                   panel.grid.major.x = element_blank(), 
                    panel.grid.minor = element_blank(),
                    panel.background = element_blank(), 
                    axis.line = element_line(colour = "black"),
@@ -60,9 +66,11 @@ g <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end,
                               linewidth=percent, color=percent)) + 
   facet_grid(council~., space="free_y", scales="free_y") +
   geom_segment() +
+  # Reference line
+  geom_vline(xintercept=ymd("2024-01-01"), color="grey30", lwd=0.2, linetype="dashed") +
   # Add text
-  # geom_text(mapping=aes(y=species, x=midpoint, label=percent_label), inherit.aes = F,
-  #           color="black", size=2.2) +
+  # geom_text(mapping=aes(y=species, x=midpoint, label=percent_label), 
+  #           inherit.aes = F, show.legend = F, color="grey50", size=2) + # color="black", size=2.2
   # Axis
   scale_x_date(breaks = seq(as.Date("2023-01-01"), as.Date("2025-01-01"), by = "3 months"),
                date_label = "%b") +
@@ -82,6 +90,7 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "FigX_seasonal_allocations.png"),
        width=6.5, height=3.5, units="in", dpi=600)
+
 
 
 

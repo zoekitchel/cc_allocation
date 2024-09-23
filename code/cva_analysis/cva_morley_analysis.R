@@ -72,16 +72,17 @@ my_theme <-  theme(axis.text=element_text(size=8),
 # Plot data
 g <- ggplot(data, aes(y=dist_change, x=shift_km)) +
   facet_grid(rcp~region, scales="free_x") +
-  geom_boxplot() +
+  geom_boxplot(lwd=0.3, fill="grey90") +
   # Labels
-  labs(x="End-of-century centroid shift (km)", y="Propensity for\ndistribution change") +
+  labs(x="End-of-century centroid shift (km)\n(model-based)", 
+       y="Propensity for distribution change\n(expert-based)") +
   # Theme
-  theme_bw()
+  theme_bw() + my_theme
 g
 
 # Export
-# ggsave(g, filename=file.path(plotdir, "FigX_cva_analysis.png"), 
-#        width=6.5, height=6.5, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "FigX_cva_morley_analysis.png"),
+       width=6.5, height=3, units="in", dpi=600)
 
 
 
