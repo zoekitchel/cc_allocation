@@ -25,7 +25,7 @@ data_sa <- readRDS(file.path(indir, "south_atlantic/Burton_etal_2023_cva.Rds")) 
          region="South Atlantic")
 data_np <- readRDS(file.path(indir, "north_pacific/Spencer_etal_2019_cva.Rds")) %>% 
   mutate(reference="Spencer et al. 2019",
-         region="North Pacific")
+         region="Bering Sea")
 data_wp <- readRDS(file.path(indir, "western_pacific/Giddens_etal_2022_cva.Rds")) %>% 
   mutate(reference="Giddens et al. 2022",
          region="Western Pacific")
@@ -54,11 +54,14 @@ data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_p
   # Arrange
   select(reference, region, functional_group, comm_name, species, 
          vulnerability, sensitivity, exposure, dir_effect, dist_change) %>% 
+  # Format directional effect
+  mutate(dir_effect=stringr::str_to_sentence(dir_effect)) %>% 
   # Format scores
   mutate(exposure=factor(exposure, levels=c("Low", "Moderate", "High", "Very high")),
          sensitivity=factor(sensitivity, levels=c("Low", "Moderate", "High", "Very high")),
          vulnerability=factor(vulnerability, levels=c("Low", "Moderate", "High", "Very high")),
-         dist_change=factor(dist_change, levels=c("Low", "Moderate", "High", "Very high"))) %>% 
+         dist_change=factor(dist_change, levels=c("Low", "Moderate", "High", "Very high")),
+         dir_effect=factor(dir_effect, levels=c("Negative", "Neutral", "Positive"))) %>% 
   # Format functional group
   mutate(functional_group=stringr::str_to_sentence(functional_group),
          functional_group=recode(functional_group,
@@ -111,7 +114,7 @@ data <- bind_rows(data_ne, data_sa, data_gom, data_np, data_wp, data_pac, data_p
                         "Haemulon plumieri"="Haemulon plumierii",
                         "Melanogrammus aegleinus"="Melanogrammus aeglefinus",
                         "Sebastes dalli"="Sebastes dallii"),
-         species=ifelse(comm_name=="Gulf sturgeon", "Acipenser oxyrhynchus desotoi", species)) %>% 
+         species=ifelse(comm_name=="Gulf sturgeon", "Acipenser oxyrinchus desotoi", species)) %>% 
   # Format name
   mutate(comm_name=recode(comm_name, 
                           "Scamp"="Scamp grouper",
@@ -144,8 +147,8 @@ table(data$functional_group) # could improve
 table(data$vulnerability)
 table(data$exposure)
 table(data$sensitivity)
-table(data$dir_effect)
 table(data$dist_change)
+table(data$dir_effect)
 
 # Species key
 spp_key <- data %>% 
@@ -153,7 +156,7 @@ spp_key <- data %>%
 freeR::which_duplicated(spp_key$comm_name)
 freeR::which_duplicated(spp_key$species) # FINE: Oncorhynchus spp, Paralithodes camtschaticus, Sebastes paucispinis, Sebastes pinniger
 
-freeR::check_names(spp_key$species) # Nicholsina usta, Palola viridis are both correct
+freeR::check_names(spp_key$species) # Acipenser oxyrinchus desotoi, Nicholsina usta, Palola viridis are both correct
 
 
 # Plot data
