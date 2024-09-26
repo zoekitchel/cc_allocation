@@ -13,7 +13,7 @@ datadir <- "data"
 plotdir <- "figures"
 
 # Read CVA data
-cva_orig <- readRDS("data/cva/processed/cva_data.Rds")
+cva_orig <- readRDS("/Users/cfree/Dropbox/Chris/UCSB/projects/cva_analysis/data/cva/processed/cva_data.Rds")
 
 # Read FMP species key
 fmp_spp_key <- readRDS("data/fmps/US_FMP_species_list.Rds")
@@ -54,7 +54,7 @@ data <- fmp_spp_key %>%
                            "GFMC"="Gulf of Mexico",
                            "MAFMC"="Northeast",
                            "NEFMC"="Northeast",
-                           "NPFMC"="North Pacific",
+                           "NPFMC"="Bering Sea",
                            "PFMC"="Pacific",
                            "SAFMC"="South Atlantic",
                            "WPFMC"="Western Pacific")) %>% 

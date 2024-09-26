@@ -68,8 +68,9 @@ data3 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>%
   # Format type
   mutate(type=recode_factor(type,
                             "Initial allocation"="Initial allocation",
+                            "Re-allocation to offset historical exclusion of rec. sector"="Re-allocation to offset\nhistorical exclusion of rec. sector",
                             "Re-allocation to offset commercial climate impacts"="Re-allocation to offset\ncommercial climate impacts",
-                            "Re-allocation to offset historical exclusion of rec. sector"="Re-allocation to offset\nhistorical exclusion of rec. sector"))
+  ))
 
 # Read data
 data4 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>% 
