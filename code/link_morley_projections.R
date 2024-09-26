@@ -1,4 +1,5 @@
 # CREATION DATE 7 Sep 2024
+# MODIFIED DATE 24 Sep 2024
 
 # AUTHOR: zoe.j.kitchel@gmail.com
 
@@ -17,64 +18,318 @@ source(file.path("functions","return_spptaxonomy_function.R"))
 ##Load data
 ########################
 
-#####Bring in projections and database and make sure species names match
+#####Bring in projections 
 
-    #Species projections from bottom trawl survey data for North America (Morley et al. 2018/2019)
-    morley_projections_byspp <- fread(file.path("data","morley","zversion","morley_projections_byspp.csv"))
+    #Species projections from bottom trawl survey data for North America (Morley et al. 2018)
+    morley_projections <- data.table(readRDS(file.path("data","morley","processed","morley_projections.Rds")))
     
-    #New column with full species name
-    morley_projections_byspp[,spp := paste(str_to_title(Genus), species, sep = " ")]
+#####Bring in key to link FMPs to scientific species names
     
-    #Check taxonomy
-    projection_taxa <- get_taxa(unique(morley_projections_byspp$spp))
+    #Cleaned by CMF
+    US_FMP_species_list <- data.table(readRDS(file.path("data","fmps","US_FMP_species_list.Rds")))
+    
+    #Limit to type == "Target
+    US_FMP_species_list.r <- US_FMP_species_list[type == "Target",]
+    
+    #Calculate number of target species in each FMP
+    US_FMP_species_list.r[,count_target_spp := uniqueN(species),fmp]
+    
+#####Bring in database
+    #Cleaned by CMF
+    quota_allocations_database <- data.table(readRDS(file.path("data","database","processed","quota_allocations_database.Rds")))
+    
+    #Reduce to essential columns
+    quota_allocations_database.r <- quota_allocations_database[,.(council, council_lead, fmp, stock_orig, stock, area, allocation_yn, spatial_yn, spatial_type,
+                                                                  country_yn, country_n, country_list, state_yn, state_n, state_list, area_yn, area_n, area_list)]
+    
+#####Bring in species~stock key
+    stock_name_species_key <- fread(file.path("data","database","stock_name_species_key.csv"))
+    
+#####Bring in key linking database FMP names to US_FMP_species_list names
+    fmp_name_key <- fread(file.path("data","database","fmp_name_key.csv"))
+    
+#####Add US_FMP_species_list names for FMPs to database
+    quota_allocations_database.r <- fmp_name_key[quota_allocations_database.r, on = c("allocation_database_fmp"="fmp")]
+
+    
+########################
+##Modify FMP, Database, and Morley Projection data tables to match by species
+########################
+    
+#####Check taxonomy of Morley projections
+  #  projection_taxa <- get_taxa(unique(morley_projections$species))
     
       #Save, this takes a bit
-      saveRDS(projection_taxa, file.path("data","morley","zversion","projection_taxa.Rds"))
+   #   saveRDS(projection_taxa, file.path("data","morley","processed","projection_taxa.Rds"))
       
-      projection_taxa <- readRDS(file.path("data","morley","zversion","projection_taxa.Rds"))
+      projection_taxa <- readRDS(file.path("data","morley","processed","projection_taxa.Rds"))
     
     #Link "correct species name" back to morley projections by spp
-    morley_projections_correctedtaxa <- projection_taxa[morley_projections_byspp, on = c("query" = "spp")]
+    morley_projections_clean <- projection_taxa[morley_projections, on = c("query" = "species")]
     
-    #Allocations database upload
-    database <- fread(file.path("data","morley","zversion","sep9_db_download.csv"))
+    #Manually enter those with no match
+    morley_projections_clean[query == "Gadus ogac"]$taxa <- "Gadus macrocephalus"
+    morley_projections_clean[query == "Gadus ogac"]$worms_id <- 254538
+    morley_projections_clean[query == "Cheiraster dawsoni"]$taxa <- "Cheiraster (Luidiaster) dawsoni"
+    morley_projections_clean[query == "Cheiraster dawsoni"]$worms_id <- 380798
+    morley_projections_clean[query == "Laqueus californianus"]$taxa <- "Laqueus erythraeus"
+    morley_projections_clean[query == "Laqueus californianus"]$worms_id <- 235590
+    morley_projections_clean[query == "Portunus spinicarpus"]$taxa <- "Achelous spinicarpus"
+    morley_projections_clean[query == "Portunus spinicarpus"]$worms_id <- 557889
+    morley_projections_clean[query == "Nearchaster aciculosus"]$taxa <- "Nearchaster (Nearchaster) aciculosus"
+    morley_projections_clean[query == "Nearchaster aciculosus"]$worms_id <- 380816
     
-    #Make all empty cells in database NAs to allow for melt
-    database[ , names(database) := lapply(.SD, function(x) { x[is.na(x) | x == ""] <- NA; x })]
-    
-    #Make sure column 46 is 'notes' for this next step to work correctly
-    stopifnot(colnames(database[,46])== "notes")
-    
-    #Wide to long so that each species (even within a complex) gets it's own row, na.rm = T prevents NAs in Species name column from having fewer than 28 spp in complex
-    database.l <- melt(database, measure.vars = colnames(database[,47:ncol(database)]), variable.name = "Species_num_complex", value.name = "Species_name", na.rm = T)
-    
-    #Check database taxonomy to match with projections
-    database_taxa <- get_taxa(unique(database.l$Species_name))
+#####Check taxonomy of FMPs
+    #Check FMP taxonomy to match with database, and projections
+   # fmp_taxa_clean <- get_taxa(unique(US_FMP_species_list.r$species))
     
     #Save, this takes a bit
-    saveRDS(database_taxa, file.path("data","morley","zversion","database_taxa.Rds"))
+  #  saveRDS(fmp_taxa_clean, file.path("data","fmps","fmp_taxa_clean.Rds"))
     
-    database_taxa <- readRDS(file.path("data","morley","zversion","database_taxa.Rds"))
+    fmp_taxa_clean <- readRDS(file.path("data","fmps","fmp_taxa_clean.Rds"))
     
-    #Link "correct species name" back to database by Species_name
-    database_correctedtaxa <- database_taxa[database.l, on = c("query" = "Species_name")]
-
-######Link on region
-    #Currently, the projections have 7 regions : East_Canada, EBS (includes AI), GMEX, GOA, NEUS, SEUS, West_USA 
-    #Currently, the database has FMPs with regionally inspired names
-    #We'll make a key to link projections with FMPs
-    #Note that some FMPs overlap with multiple regions, therefore, we will include two columns
-
-    #Made a key manually, now load up
-    fmp_region_key <- fread(file.path("data","fmp_region_key.csv"), strip.white = T)
-    #Find and replace \n
-    fmp_region_key <- fmp_region_key[, lapply(.SD, function(x) if (is.character(x)) gsub("\\\\n", "\n", x) else x)]
+    #Reduce to essential columns (fishbase ID, species name)
+    fmp_taxa_clean.r <- fmp_taxa_clean[,.(query,worms_id, taxa,common_name)]
     
-    #Add to database
-    database_correctedtaxa.reglink <- fmp_region_key[database_correctedtaxa, on = c("council_lead", "fmp")]
+    #Which did not match up?
+    setdiff(unique(US_FMP_species_list.r$species), fmp_taxa_clean$query)
+    
+    #Manually add in correct query/taxa combo for Embassichythys bathybius and Gerardia spp.
+    fmp_taxa_clean.r[taxa == "Microstomus bathybius"]$query <- "Embassichthys bathybius"
+    fmp_taxa_clean.r[query == "Gerardia"]$query <- "Gerardia spp."
+    
+    #Link with FMPs
+    US_FMP_species_list_clean <- fmp_taxa_clean.r[US_FMP_species_list.r, on = c("query" = "species")]
+    
+    #Delete any without specific taxa affiliations (i.e. shark complex)
+    US_FMP_species_list_clean <- US_FMP_species_list_clean[!is.na(query),]
+    
+    #Rename council as council_lead
+    setnames(US_FMP_species_list_clean, "council","council_lead")
+    
+    #Reduce to essential columns
+    US_FMP_species_list_clean.r <- US_FMP_species_list_clean[,.(worms_id, taxa, council_lead, fmp, comm_name, count_target_spp)]
+    
+    
+###Check taxonomy of database stock~species key
+    #Flip wide to long with extra species
+    stock_name_species_key.l <- melt(stock_name_species_key, id.vars = c("council_lead","fmp","stock"),
+                                     variable.name = "Species_num",
+                                     value.name = "species",
+                                     na.rm = T)
+    
+   # stock_spp_clean <- get_taxa(unique(stock_name_species_key.l$species))
+    
+    #Save, this takes a bit
+  #  saveRDS(stock_spp_clean, file.path("data","database","stock_spp_clean.Rds"))
+    
+    stock_spp_clean <- readRDS(file.path("data","database","stock_spp_clean.Rds"))
+    
+    #Which did not match up?
+    setdiff(unique(stock_name_species_key.l$species), stock_spp_clean$query)
 
-    #Wide to long (two regions for some stocks)
-    database_correctedtaxa.reglink.l <- melt(database_correctedtaxa.reglink, measure.vars = c("Reg1","Reg2"), variable.name = "Region_number",value.name = "Region")
+########################
+##Link up projections with FMP key
+########################
+
+      #Add region column to US_FMP_species_list_clean.r to match with morley
+    reg_key <- data.table(fmp = c(
+                                  "Fishery Management Plan for Atlantic Salmon",                                                       
+                                 "Spiny Dogfish Fishery Management Plan",
+                                 "Fishery Management Plan for Deep-Sea Red Crab",
+                                 "Northeast Multispecies Fishery Management Plan for Small Mesh Multispecies",
+                                 "Northeast Skate Complex Fishery Management Plan",
+                                 "Atlantic Herring Fishery Management Plan",
+                                 "Monkfish Fishery Management Plan",
+                                 "Fishery Management Plan for Atlantic Sea Scallops",
+                                 "Fishery Management Plan for the Northeast Multi-species Fishery",
+                                   "Summer Flounder, Scup, and Black Sea Bass Fishery Management Plan",
+                                   "Mackerel, Squid, Butterfish Fishery Management Plan",
+                                   "Atlantic Surfclam and Ocean Quahog",
+                                   "Bluefish Fishery Management Plan",
+                                   "Tilefish Fishery Management Plan",
+                                   "South Atlantic Snapper-Grouper Fishery Management Plan",
+                                   "Gulf of Mexico and South Atlantic Coastal Migratory Pelagic Fishery Management Plan",
+                                   "Dolphin Wahoo Fishery Management Plan",
+                                   "Golden Crab Fishery Management Plan",
+                                   "South Atlantic Shrimp Fishery Management Plan",
+                                   "Spiny Lobster Fishery Management Plan",
+                                   "Puerto Rico",
+                                   "St. Croix",
+                                   "St. Thomas and St. John",
+                                   "Fishery Management Plan for Reef Fish Resources of the Gulf of Mexico",
+                                   "Gulf of Mexico Red Drum Fishery Management Plan",
+                                   "Gulf of Mexico Shrimp Fishery Management Plan",
+                                   "Pacific Coast Groundfish Fishery Management Plan",
+                                   "Coastal Pelagic Species Fishery Management Plan",
+                                   "Pacific Coast Salmon Fishery Management Plan",
+                                   "Fishery Management Plan for U.S. West Coast Fisheries for Highly Migratory Species",
+                                   "Fishery Management Plan for the Scallop Fishery off Alaska",
+                                   "Fishery Management Plan for the Salmon Fisheries in the EEZ Off Alaska",
+                                   "Fishery Management Plan for Bering Sea/Aleutian Islands King and Tanner Crabs",
+                                   "Fishery Management Plan for Groundfish of the Gulf of Alaska",
+                                   "Fishery Management Plan Plan for Groundfish of the Bering Sea and Aleutian Islands Management Area",
+                                   "Fishery Management Plan for Fish Resources of the Arctic Management Area",
+                                   "Fishery Ecosystem Plan for the Pacific Remote Island Areas",
+                                   "Fishery Ecosystem Plan for the American Samoa Archipelago",
+                                   "Fishery Ecosystem Plan for the Hawaii Archipelago",
+                                   "Fishery Ecosystem Plan for Pacific Pelagic Fisheries of the Western Pacific Region",
+                                   "Fishery Ecosystem Plan for the Mariana Archipelago"),
+                          region = c("Northeast",                                                       
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "Northeast",
+                                     "South Atlantic",
+                                     "South Atlantic",
+                                     "South Atlantic",
+                                     "South Atlantic",
+                                     "South Atlantic",
+                                     "Gulf of Mexico_South Atlantic",
+                                     NA,
+                                     NA,
+                                     NA,
+                                     "Gulf of Mexico",
+                                     "Gulf of Mexico",
+                                     "Gulf of Mexico",
+                                     "US West Coast",
+                                     "US West Coast",
+                                     "US West Coast",
+                                     "US West Coast",
+                                     "Eastern Bering Sea_Gulf of Alaska",
+                                     "Eastern Bering Sea_Gulf of Alaska",
+                                     "Eastern Bering Sea",
+                                     "Gulf of Alaska",
+                                     "Eastern Bering Sea",
+                                     "Eastern Bering Sea",
+                                     NA,
+                                     NA,
+                                     NA,
+                                     NA,
+                                     NA),
+                          fmp_label = c(
+                            "Atlantic Salmon",                                                       
+                            "Spiny Dogfish",
+                            "Deep-Sea Red Crab",
+                            "NE Small-Mesh Multispecies (Whiting)",
+                            "NE Skate Complex",
+                            "Atlantic Herring",
+                            "Monkfish",
+                            "Atlantic Sea Scallops",
+                            "NE Multispecies Fishery",
+                            "Summer Flounder, Scup, and Black Sea Bass",
+                            "Mackerel, Squid, and Butterfish",
+                            "Atlantic Surfclam and Ocean Quahog",
+                            "Bluefish",
+                            "Tilefish",
+                            "Snapper-Grouper",
+                            "Coastal Migratory Pelagics",
+                            "Dolphin-Wahoo",
+                            "Golden Crab",
+                            "Shrimp",
+                            "Spiny Lobster",
+                            "Puerto Rico",
+                            "St. Croix",
+                            "St. Thomas and St. John",
+                            "Reef Fish Resources",
+                            "Red Drum",
+                            "Shrimp",
+                            "Pacific Groundfish",
+                            "Coastal Pelagic Species",
+                            "Pacific Salmon",
+                            "Pacific Highly Migratory Species",
+                            "Alaska Scallops",
+                            "Alaska Salmon",
+                            "King and Tanner Crabs",
+                            "GOA Groundfish",
+                            "BSAI Groundfish",
+                            "Arctic Fish Resources",
+                            "Fishery Ecosystem Plan for the Pacific Remote Island Areas",
+                            "Fishery Ecosystem Plan for the American Samoa Archipelago",
+                            "Fishery Ecosystem Plan for the Hawaii Archipelago",
+                            "Fishery Ecosystem Plan for Pacific Pelagic Fisheries of the Western Pacific Region",
+                            "Fishery Ecosystem Plan for the Mariana Archipelago"))
+    
+    US_FMP_species_list_clean.region <- US_FMP_species_list_clean.r[reg_key, on = "fmp"]
+    
+    #Only keep those with link to Morley region (in continental US)
+    US_FMP_species_list_clean.region <- US_FMP_species_list_clean.region[!is.na(region),]
+    
+    #For those few stocks that cross multiple regions, add extra rows
+   
+     # Function to split regions with underscores
+    split_regions <- function(dt) {
+      # Identify rows where 'region' contains an underscore
+      underscore_rows <- dt[grepl("_", region)]
+      
+      # Split these rows by the underscore and create new rows
+      split_rows <- underscore_rows[, strsplit(region, "_"), by = .(worms_id, taxa, council_lead, fmp,fmp_label, comm_name,count_target_spp)]
+      
+      # Create a new data.table with the individual regions
+      dt_split <- split_rows[, .(worms_id, taxa, council_lead, fmp, fmp_label, comm_name,count_target_spp, region = V1)]
+      
+      # Keep original rows without underscores
+      dt_no_underscore <- dt[!grepl("_", region)]
+      
+      # Combine the original rows with the new split rows
+      dt_final <- rbind(dt_no_underscore, dt_split)
+      
+      return(dt_final)
+    }
+    
+    # Apply the function to the data.table
+    US_FMP_species_list_clean.region.split <- split_regions(US_FMP_species_list_clean.region)
+    
+################################
+####Link projections with stocks, fmps, and fmcs
+################################   
+    
+    stock_fmp_spp_merge <- morley_projections_clean[US_FMP_species_list_clean.region.split, on = c("region","taxa","worms_id")]
+    
+    #Add more useful council names
+    stock_fmp_spp_merge[,council_lead := factor(council_lead, levels = c("NPFMC","PFMC","NEFMC","SAFMC","MAFMC","GFMC"),
+                                                labels = c("North Pacific","Pacific","New England",
+                                                           "South Atlantic","Mid-Atlantic","Gulf of Mexico"))]
+    
+    #reduce to low/med uncertainty, and only those with matches
+    stock_fmp_spp_merge.med_highcertain <- stock_fmp_spp_merge[complete.cases(stock_fmp_spp_merge[,.(worms_id, region,shift_km)])][uncertainty != "high"]
+    
+    #Calculate number of species per fmp in plot
+    stock_fmp_spp_merge.med_highcertain[,spp_fmp_proj := uniqueN(worms_id),.(fmp)]
+    
+    #Add new label with FMP and with n
+    stock_fmp_spp_merge.med_highcertain[,fmp_label_n := paste0(fmp_label," (n = ",spp_fmp_proj,")")]
+    
+    
+  
+    (projections_federal_species <- ggplot() +
+        geom_boxplot(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = shift_km, fill = factor(rcp)), lwd = 0.3, outlier.size = 1) +
+        geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -100,label = spp_fmp_proj), size = 3, check_overlap = T, fontface = "bold") +
+        geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -175,label = count_target_spp), size = 3, check_overlap = T) +
+        geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -135,label = "—"), size = 3, check_overlap = T) +
+        facet_grid(~council_lead, scales = "free_x", space = "free") +
+        labs(x = "Fishery Management Plan", y = "Shift by the end of 21st century (km)", fill = "RCP") +
+        scale_fill_manual(values = c("grey","white"), labels = c("2.6","8.5")) +
+        theme_classic() +
+        theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 11),   # Increase x-axis text size
+              axis.text.y = element_text(size = 11),                                      # Increase y-axis text size
+              axis.title = element_text(size = 14),                                       # Increase axis title size
+              legend.position = c(0.9, 0.8),                                              # Keep legend position
+              legend.text = element_text(size = 11),                                      # Increase legend text size
+              legend.title = element_text(size = 14),                                      # Increase legend title size
+              strip.text = element_text(size = 11)
+        ))
+    
+    ggsave(projections_federal_species, path = "figures",filename = "projections_federal_species.jpg", width = 12, height = 8, units = "in")
     
 ################################
 ####Link projections with database
