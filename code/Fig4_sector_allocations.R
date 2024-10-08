@@ -149,7 +149,7 @@ g <- gridExtra::grid.arrange(g1, g2, nrow=1, widths=c(0.6, 0.4))
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_sector_allocations.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig4_sector_allocations.png"), 
        width=6.5, height=6.5, units="in", dpi=600)
 
 

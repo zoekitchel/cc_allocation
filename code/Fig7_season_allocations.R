@@ -25,9 +25,9 @@ data <- data_orig %>%
   # Factor council
   mutate(council=recode_factor(council, 
                                "New England"="New England", 
-                               "Mid-Atlantic"="MA", 
-                               "South Atlantic"="SA", 
-                               "Pacific"="P")) %>% 
+                               "Mid-Atlantic"="Mid-Atlantic", 
+                               "South Atlantic"="South Atlantic", 
+                               "Pacific"="Pacific")) %>% 
   # Format date
   mutate(start=lubridate::ymd(start),
          end=lubridate::ymd(end)) %>% 
@@ -52,6 +52,7 @@ my_theme <-  theme(axis.text=element_text(size=6),
                    legend.text=element_text(size=6),
                    legend.title=element_text(size=7),
                    strip.text=element_text(size=6),
+                   strip.text.y = element_text(angle = 0),
                    plot.tag = element_text(size=7),
                    # Gridlines
                    panel.grid.major.x = element_blank(), 
@@ -83,12 +84,14 @@ g <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end,
   # Labels
   labs(x="", y="") +
   # Theme
-  theme_bw() + my_theme
+  theme_bw() + my_theme +
+  theme(legend.position = "right",
+        legend.key.size = unit(0.3, "cm"))
 g
 
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_seasonal_allocations.png"),
+ggsave(g, filename=file.path(plotdir, "Fig7_seasonal_allocations.png"),
        width=6.5, height=3.5, units="in", dpi=600)
 
 

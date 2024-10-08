@@ -168,7 +168,7 @@ g <- gridExtra::grid.arrange(g1, g2, g3, widths=c(0.3, 0.25, 0.45), nrow=1)
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig7_shifting_dist_approaches.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig11_shifting_dist_approaches.png"), 
        width=6.5, height=3, units="in", dpi=600)
 
 

@@ -13,7 +13,7 @@ datadir <- "data"
 plotdir <- "figures"
 
 # Read CVA data
-cva_orig <- readRDS("data/cva/processed/cva_data.Rds")
+cva_orig <- readRDS("/Users/cfree/Dropbox/Chris/UCSB/projects/cva_analysis/data/cva/processed/cva_data.Rds")
 
 # Read database
 data_orig <- readRDS("data/database/processed/quota_allocations_database.Rds")
@@ -177,7 +177,7 @@ g <- ggplot(data_sum_ordered, aes(y=fmp_short, x=prop, fill=vulnerability)) +
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_cva_analysis.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig12_cva_analysis.png"), 
        width=6.5, height=6.5, units="in", dpi=600)
 
 

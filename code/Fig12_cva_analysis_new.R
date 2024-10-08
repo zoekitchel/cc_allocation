@@ -152,7 +152,7 @@ g <- ggplot(data_sum_ordered, aes(y=fmp_short, x=prop, fill=vulnerability)) +
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_cva_analysis.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig12_cva_analysis_new.png"), 
        width=6.5, height=6.5, units="in", dpi=600)
 
 

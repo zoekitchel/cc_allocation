@@ -33,7 +33,7 @@ data1 <- tibble(quota_comm=x,
   # Recode
   mutate(type=recode_factor(type,
                             "value_tot"="Total",
-                            "value_rec"="Recretational",
+                            "value_rec"="Recreational",
                             "value_comm"="Commercial"))
 
 # Optimal commerical quota
@@ -56,7 +56,9 @@ data2 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>%
   mutate(type=recode_factor(type,
                             "Initial allocation"="Initial allocation",
                             "Re-allocation with better rec. catch data"="Re-allocation with\nbetter rec. catch data",
-                            "Re-allocation with addition of new sector"="Re-allocation with\naddition of new sector"))
+                            "Re-allocation with addition of new sector"="Re-allocation with\naddition of new sector")) %>% 
+  # filter
+  filter(prop!=0)
 
 # Read data
 data3 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>% 
@@ -66,8 +68,9 @@ data3 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>%
   # Format type
   mutate(type=recode_factor(type,
                             "Initial allocation"="Initial allocation",
+                            "Re-allocation to offset historical exclusion of rec. sector"="Re-allocation to offset\nhistorical exclusion of rec. sector",
                             "Re-allocation to offset commercial climate impacts"="Re-allocation to offset\ncommercial climate impacts",
-                            "Re-allocation to offset historical exclusion of rec. sector"="Re-allocation to offset\nhistorical exclusion of rec. sector"))
+  ))
 
 # Read data
 data4 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>% 
@@ -79,6 +82,7 @@ data4 <- readxl::read_excel(file.path(datadir, "Fig4_data.xlsx")) %>%
                             "Initial allocation"="Initial allocation",
                             "Re-allocation to promote food production/sovereignty"="Re-allocation to promote\nfood production/sovereignty",
                             "Re-allocation to reduce protected species bycatch"="Re-allocation to reduce\nprotected species bycatch"))
+
 
 
 # Plot data
@@ -93,6 +97,7 @@ my_theme <-  theme(axis.text=element_text(size=5),
                    plot.subtitle = element_text(size=6, face="italic", color="grey50"),
                    plot.tag=element_text(size=7),
                    # Gridlines
+                   panel.border = element_blank(),
                    panel.grid.major = element_blank(), 
                    panel.grid.minor = element_blank(),
                    panel.background = element_blank(), 
@@ -109,6 +114,8 @@ g1 <- ggplot(data1, aes(x=quota_comm, y=value, color=type)) +
   geom_line() +
   # Points
   geom_point(data=data1_opt, mapping=aes(fill=type), color="black", pch=21) +
+  # Labels
+  geom_text(data=data1_opt, mapping=aes(label=type), size=2.2, hjust=-0.2, vjust=c(0.5, 0.5, -0.3)) +
   # Scales
   labs(x="Commercial quota\n\n\n\n\n\n\n\n\n", y="Net economic value", 
        title="A. Economic efficiency", 
@@ -121,12 +128,21 @@ g1 <- ggplot(data1, aes(x=quota_comm, y=value, color=type)) +
   scale_fill_manual(name="", values=c("#f58b1f", "#a60434", "#00b9ba")) +
   # Theme
   theme_bw() + my_theme + 
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  theme(axis.title.x.bottom  = element_text(color="#00b9ba"),
+        axis.text.x.bottom = element_text(color="#00b9ba"),
+        axis.ticks.x.bottom=element_line(color="#00b9ba"),
+        axis.line.x.bottom = element_line(color="#00b9ba"),
+        axis.title.x.top  = element_text(color="#a60434"),
+        axis.text.x.top = element_text(color="#a60434"),
+        axis.ticks.x.top = element_line(color="#a60434"),
+        axis.line.x.top = element_line(color="#a60434"))
 g1
 
 # Plot data
 g2 <- ggplot(data2, aes(x=type, y=prop, fill=sector)) +
   geom_bar(stat="identity") +
+  geom_text(aes(label=prop), position = position_stack(vjust = 0.5), size=2.2, color="white") +
   # Labels
   labs(x="\n\n\n", y="% of quota", 
        title="B. Horizontal equity", 
@@ -142,6 +158,7 @@ g2
 # Plot data
 g3 <- ggplot(data3, aes(x=type, y=prop, fill=sector)) +
   geom_bar(stat="identity") +
+  geom_text(aes(label=prop), position = position_stack(vjust = 0.5), size=2.2, color="white") +
   # Labels
   labs(x="", y="% of quota", 
        title="C. Vertical equity", 
@@ -157,6 +174,7 @@ g3
 # Plot data
 g4 <- ggplot(data4, aes(x=type, y=prop, fill=sector)) +
   geom_bar(stat="identity") +
+  geom_text(aes(label=prop), position = position_stack(vjust = 0.5), size=2.2, color="white") +
   # Labels
   labs(x="\n", y="% of quota", 
        title="D. Other considerations", 
@@ -175,7 +193,7 @@ g <- gridExtra::grid.arrange(g1, g2, g3, g4, widths=c(width1, rep((1-width1)/3, 
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_equity_schematic.png"), 
-       width=6.5, height=4.5, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig10_equity_approaches.png"), 
+       width=6.5, height=3.9, units="in", dpi=600)
  
 
