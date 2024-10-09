@@ -45,7 +45,8 @@ data <- data_orig %>%
   # Format common name
   mutate(area=stringr::str_trim(area)) %>% 
   # Add country columns
-  mutate(country_yn=ifelse(!is.na(country_list), "yes", "no"),
+  mutate(country_list=gsub(";", ",", country_list),
+         country_yn=ifelse(!is.na(country_list), "yes", "no"),
          country_n=count_items(country_list)) %>%  
   # Add state columns
   mutate(state_yn=ifelse(!is.na(state_list), "yes", "no"),
@@ -65,6 +66,9 @@ data <- data_orig %>%
   # Add sector columns
   mutate(sector_yn=ifelse(!is.na(sector_list), "yes", "no"),
          sector_n=count_items(sector_list)) %>%  
+  # Clean subsector lists
+  mutate(subsector_list_rec=gsub(";", ",", subsector_list_rec),
+         subsector_list_comm=gsub(";", ",", subsector_list_comm)) %>% 
   # Add subsector columns
   mutate(subsector_yn=ifelse(!is.na(subsector_list_rec) | !is.na(subsector_list_comm), "yes", "no"),
          subsector_rec_yn=ifelse(!is.na(subsector_list_rec), "yes", "no"),
@@ -86,7 +90,7 @@ data <- data_orig %>%
          state_yn, state_n, state_list, state_yrs, state_notes,
          area_yn, area_n, area_list, 
          sector_yn, sector_type, sector_n, sector_list, sector_yrs, sector_notes,
-         subsector_yn, subsector_n, subsector_yrs, subsector_notes,
+         subsector_yn, subsector_type, subsector_n, subsector_yrs, subsector_notes,
          subsector_comm_yn, subsector_comm_n, subsector_list_comm,
          subsector_rec_yn, subsector_rec_n, subsector_list_rec,
          season_yn, season_n, season_list, season_yrs, season_notes,
