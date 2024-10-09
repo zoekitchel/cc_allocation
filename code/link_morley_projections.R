@@ -309,24 +309,38 @@ source(file.path("functions","return_spptaxonomy_function.R"))
     #Add new label with FMP and with n
     stock_fmp_spp_merge.med_highcertain[,fmp_label_n := paste0(fmp_label," (n = ",spp_fmp_proj,")")]
     
+    #Add dummy row so that red crab bumps left (missing rcp 2.6)
+    row <- stock_fmp_spp_merge.med_highcertain[comm_name == "Deep-sea red crab"]
+    row$rcp <- "RCP 2.6"
+    row$shift_km <- -400
+    
+    #Link back
+    stock_fmp_spp_merge.med_highcertain <- rbind(stock_fmp_spp_merge.med_highcertain, row)
+    
+    
     
   
     (projections_federal_species <- ggplot() +
-        geom_boxplot(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = shift_km, fill = factor(rcp)), lwd = 0.3, outlier.size = 1) +
+        geom_hline(yintercept = 71.12, color = "grey75", linetype = "dashed") +
+        geom_hline(yintercept = 189.4, color = "grey75", linetype = "dashed") +
+        geom_hline(yintercept = 405.8, color = "grey75", linetype = "dashed") +
+        geom_boxplot(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = shift_km, fill = factor(rcp)), lwd = 0.3, outlier.size = 1, position = position_dodge(preserve = "single")) +
         geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -100,label = spp_fmp_proj), size = 3, check_overlap = T, fontface = "bold") +
         geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -175,label = count_target_spp), size = 3, check_overlap = T) +
         geom_text(data = stock_fmp_spp_merge.med_highcertain, aes(x = reorder(fmp_label,-shift_km), y = -135,label = "—"), size = 3, check_overlap = T) +
         facet_grid(~council_lead, scales = "free_x", space = "free") +
         labs(x = "Fishery Management Plan", y = "Shift by the end of 21st century (km)", fill = "RCP") +
-        scale_fill_manual(values = c("grey","white"), labels = c("2.6","8.5")) +
+        scale_fill_manual(values = c("grey","white"), labels = c("2.6","8.5"), drop = FALSE) +
+        coord_cartesian(ylim = c(-190,1800)) +
         theme_classic() +
         theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 11),   # Increase x-axis text size
               axis.text.y = element_text(size = 11),                                      # Increase y-axis text size
               axis.title = element_text(size = 14),                                       # Increase axis title size
-              legend.position = c(0.9, 0.8),                                              # Keep legend position
+              legend.position = c(0.9, 0.9),                                              # Keep legend position
               legend.text = element_text(size = 11),                                      # Increase legend text size
               legend.title = element_text(size = 14),                                      # Increase legend title size
-              strip.text = element_text(size = 11)
+              strip.text = element_text(size = 11),
+              legend.direction = "horizontal"
         ))
     
     ggsave(projections_federal_species, path = "figures",filename = "projections_federal_species.jpg", width = 12, height = 8, units = "in")

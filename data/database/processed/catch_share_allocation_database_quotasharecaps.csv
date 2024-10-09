@@ -1,0 +1,66 @@
+﻿council_lead,fmp,stock_orig,indiv_quota_share_cap,share_cap,share_program,share_program_short
+Atlantic HMS,Consolidated Atlantic Highly Migratory Species,Bluefin tuna - Western Atlantic,25,share: 25; allocation: 25,Individual Bluefin Tuna Quota,Bluefin
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Southern Tanner crab - Bering Sea,1,CVO/CP = 1%; CVC/CPC = 2%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Snow crab - Bering Sea,1,CVO/CP = 1%; CVC/CPC = 2%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Red king crab - Bristol Bay,1,CVO/CP = 1%; CVC/CPC = 2%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Red king crab - Pribilof Islands,2,CVO/CP = 2%; CVC/CPC = 4%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Blue king crab - Pribilof Islands,2,CVO/CP = 2%; CVC/CPC = 4%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Blue king crab - Saint Matthew Island,2,CVO/CP = 2%; CVC/CPC = 4%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Golden king crab - Aleutian Islands,10,CVO/CP = 10%; CVC/CPC = 20%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,Red king crab - Western Aleutian Islands,10,CVO/CP = 10%; CVC/CPC = 20%,Bering Sea and Aleutian Islands King and Tanner Crab,Crab
+NPFMC,Groundfish of the Gulf of Alaska,Northern rockfish - Western / Central Gulf of Alaska,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Gulf of Alaska,Shortraker rockfish - Gulf of Alaska,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Gulf of Alaska,Gulf of Alaska Blackspotted and Rougheye Rockfish Complex,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Gulf of Alaska,Gulf of Alaska Thornyhead Rockfish Complex,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Gulf of Alaska,Pacific ocean perch - Gulf of Alaska,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Gulf of Alaska,Dusky rockfish - Gulf of Alaska,4,Individual: CV: 4%; CP: 40%; CV Cooperative: 30%; Vessel: CV: 8%; CP: 60%; Processor: 30%,Central Gulf of Alaska Rockfish,GOA Rockfish
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area / Groundfish of the Gulf of Alaska,Sablefish - Eastern Bering Sea / Aleutian Islands / Gulf of Alaska,1.5,1%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80; Individual Fishing Quota Halibut and Sablefish,GOA Sablefish IFQ
+MAFMC,Tilefish,Golden tilefish - Mid-Atlantic Coast,49,49%,Golden Tilefish,Golden Tilefish
+PFMC,Pacific Coast Groundfish,Dover sole - Pacific Coast,3.9,IFQ vessel limit: 3.9%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Petrale sole - Pacific Coast,4.5,IFQ vessel limit: 4.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Sablefish - Pacific Coast - N of 36,4.5,IFQ vessel limit: 4.5% N of 36˚; 15% S of 36˚,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Lingcod - Northern Pacific Coast,5.3,IFQ vessel limit: 5.3%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Pacific ocean perch - Pacific Coast,6,IFQ vessel limit: 6%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Darkblotched rockfish - Pacific Coast,6.8,IFQ vessel limit: 6.8%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,English sole - Pacific Coast,7.5,IFQ vessel limit: 7.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Minor Shelf Rockfish North,7.5,IFQ vessel limit: 7.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Minor Slope Rockfish North,7.5,IFQ vessel limit: 7.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Yellowtail rockfish - Northern Pacific Coast,7.5,IFQ vessel limit: 7.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Widow rockfish - Pacific Coast,8.5,IFQ vessel limit: 8.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Longspine thornyhead - Pacific Coast,9,IFQ vessel limit: 9%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Minor Slope Rockfish South,9,IFQ vessel limit: 9%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Shortspine thornyhead - Pacific Coast,9,IFQ vessel limit: 9%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Canary rockfish - Pacific Coast,10,IFQ vessel limit: 10%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Yelloweye rockfish - Pacific Coast,11.4,IFQ vessel limit: 11.4%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Lingcod - Southern Pacific Coast,13.3,IFQ vessel limit: 13.3%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Minor Shelf Rockfish South,13.5,IFQ vessel limit: 13.5%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Chilipepper - Southern Pacific Coast,15,IFQ vessel limit: 15%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Other Flatfish,15,IFQ vessel limit: 15%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Pacific hake - Pacific Coast,15,IFQ vessel limit: 15% (interim),West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Splitnose rockfish - Pacific Coast,15,IFQ vessel limit: 15%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Sablefish - Pacific Coast - S of 36,15,IFQ vessel limit: 4.5% N of 36˚; 15% S of 36˚,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Bocaccio - Southern Pacific Coast,15.4,IFQ vessel limit: 15.4%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Cowcod - Southern California,17.7,IFQ vessel limit: 17.7%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Arrowtooth flounder - Pacific Coast,20,IFQ vessel limit: 20%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Pacific cod - Pacific Coast,20,IFQ vessel limit: 20%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+PFMC,Pacific Coast Groundfish,Starry flounder - Pacific Coast,20,IFQ vessel limit: 20%,West Coast Groundfish Trawl Catch Share Program,Groundfish Trawl
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Gag - Gulf of Mexico,2.3,2.3,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Red grouper - Gulf of Mexico,4.3,4.3,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Gulf of Mexico Shallow Water Grouper Complex,7.3,7.3,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Tilefish - Gulf of Mexico,12.2,12.2,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Gulf of Mexico Tilefishes Complex,12.2,12.2,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Gulf of Mexico Deep Water Grouper Complex,14.7,14.7,Grouper and Tilefish,Grouper and Tilefish
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Yellowedge grouper - Gulf of Mexico,14.7,14.7,Grouper and Tilefish,Grouper and Tilefish
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Pacific cod - Aleutian Islands,5,"PCTC: QS & annual CQ: 5% harvester-issued, 20 percent of processor-issued; Amendment 80: person = 30%; vessel = 20%",Pacific Cod Trawl Catcher Program,Pacific Cod
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Pacific cod - Aleutian Islands,5,"PCTC: QS & annual CQ: 5% harvester-issued, 20 percent of processor-issued; Amendment 80: person = 30%; vessel = 20%",Pacific Cod Trawl Catcher Program,Pacific Cod
+GMFMC,Reef Fish Resources of the Gulf of Mexico,Red snapper - Gulf of Mexico,6,6,Red Snapper,Red Snapper
+NEFMC,Atlantic Sea Scallop,Sea scallop - Northwestern Atlantic Coast,5,individual: 5%; vessel: 2.5%,Atlantic Sea Scallops IFQ,Scallops
+MAFMC,Atlantic Surfclam and Ocean Quahog,Atlantic surfclam - Mid-Atlantic Coast,35,quota share: 35 annual cage tags (annual allocation): 65,Surf Clam and Ocean Quahog,Surf Clam and Ocean Quahog
+MAFMC,Atlantic Surfclam and Ocean Quahog,Ocean quahog - Atlantic Coast,40,quota share: 40; annual cage tags (annual allocation): 70,Surf Clam and Ocean Quahog,Surf Clam and Ocean Quahog
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Atka mackerel - Bering Sea / Aleutian Islands,30,person = 30%; vessel = 20%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Pacific ocean perch - Bering Sea / Aleutian Islands,30,person = 30%; vessel = 20%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Pacific cod - Bering Sea,30,"PCTC: QS & annual CQ: 5% harvester-issued, 20 percent of processor-issued; Amendment 80: person = 30%; vessel = 20%",Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Pacific cod - Bering Sea,30,"PCTC: QS & annual CQ: 5% harvester-issued, 20 percent of processor-issued; Amendment 80: person = 30%; vessel = 20%",Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Bering Sea / Aleutian Islands Flathead Sole Complex,30,person = 30%; vessel = 20%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Yellowfin sole - Bering Sea / Aleutian Islands,30,person = 30%; vessel = 20%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
+NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,Bering Sea / Aleutian Islands Rock Sole Complex,30,person = 30%; vessel = 20%,Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,BSAI Amendment 80
