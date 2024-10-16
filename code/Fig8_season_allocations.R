@@ -40,20 +40,18 @@ data <- data_orig %>%
   mutate(order=1:n()) 
   
 
-
-
 # Plot data
 ################################################################################
 
 # Theme
-my_theme <-  theme(axis.text=element_text(size=6),
-                   axis.title=element_text(size=7),
+my_theme <-  theme(axis.text=element_text(size=8),
+                   axis.title=element_text(size=9),
                    axis.title.y=element_blank(),
-                   legend.text=element_text(size=6),
-                   legend.title=element_text(size=7),
-                   strip.text=element_text(size=6),
+                   legend.text=element_text(size=8),
+                   legend.title=element_text(size=9),
+                   strip.text=element_text(size=8),
                    strip.text.y = element_text(angle = 0),
-                   plot.tag = element_text(size=7),
+                   plot.tag = element_text(size=9),
                    # Gridlines
                    panel.grid.major.x = element_blank(), 
                    panel.grid.minor = element_blank(),
@@ -91,7 +89,7 @@ g
 
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig7_seasonal_allocations.png"),
+ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.png"),
        width=6.5, height=3.5, units="in", dpi=600)
 
 

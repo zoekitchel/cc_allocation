@@ -83,8 +83,8 @@ g1 <- ggplot(stats, aes(y=council_lead, x=n, fill=subsector_type)) +
   scale_fill_discrete(name="Subsector type\n(in decreasing frequency)") +
   # Theme
   theme_bw() + my_theme +
-  theme(legend.position=c(0.7, 0.7),
-        legend.key.size = unit(0.3, "cm"))
+  theme(legend.position=c(0.6, 0.7),
+        legend.key.size = unit(0.25, "cm"))
 g1
 
 # Plot number of subsectors
@@ -103,7 +103,7 @@ g <- gridExtra::grid.arrange(g1, g2, nrow=1)
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig5_subsector_allocations.png"), 
-       width=6.5, height=3, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig6_subsector_allocations.png"), 
+       width=6.5, height=2.5, units="in", dpi=600)
 
 

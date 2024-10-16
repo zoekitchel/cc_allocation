@@ -60,6 +60,8 @@ stats_type_council_order <- stats_type %>%
   arrange(desc(prop)) %>% 
   pull(council_lead) 
 
+table(data$spatial_type)
+
 
 
 # Plot data

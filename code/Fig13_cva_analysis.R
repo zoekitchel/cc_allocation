@@ -15,20 +15,19 @@ plotdir <- "figures"
 # Read CVA data
 cva_orig <- readRDS("/Users/cfree/Dropbox/Chris/UCSB/projects/cva_analysis/data/cva/processed/cva_data.Rds")
 
-# Read database
-data_orig <- readRDS("data/database/processed/quota_allocations_database.Rds")
+# Read FMP species key
+fmp_spp_key <- readRDS("data/fmps/US_FMP_species_list.Rds")
 
 # Read FMP short key
-fmp_key <- readxl::read_excel("data/database/raw/fmp_short_key.xlsx")
-freeR::which_duplicated(fmp_key$fmp_short)
-
+fmp_short_key <- readxl::read_excel("data/fmps/fmp_key.xlsx")
+freeR::which_duplicated(fmp_short_key$fmp_short)
 
 # Build data
 ################################################################################
 
 # Inspect
 table(cva_orig$region)
-table(data_orig$council_lead)
+table(fmp_spp_key$council)
 
 # Process CVA
 check <- cva_orig %>% 
@@ -45,40 +44,17 @@ cva <- cva_orig %>%
   ungroup() 
 
 # Build data
-data <- data_orig %>% 
+data <- fmp_spp_key %>% 
+  # Reduce to target species
+  filter(type=="Target") %>% 
   # Remove councils without CVA
-  filter(!council_lead %in% c("Atlantic HMS", "Pacific HMS", "CFMC", "IPHC")) %>% 
-  # Species in each FMP
-  select(council_lead, fmp, comm_name, Species1:Species28) %>% 
-  unique() %>% 
-  gather(key="species_num", value="species", 4:ncol(.)) %>% 
-  select(-species_num) %>% 
-  filter(!is.na(species)) %>% 
-  unique() %>% 
-  # Recode some species
-  mutate(species=recode(species,
-                        "Bathyrara trachura" = "Bathyraja trachura",
-                        "Beringraja binoculata" = "Raja binoculata",
-                        "Caliraja rhina" = "Beringraja rhina",
-                        "Clidodoerma asperrimum" = "Clidoderma asperrimum",
-                        "Epinephelus flavolimbatus" = "Hyporthodus flavolimbatus",
-                        "Epinephelus mystacinus" = "Hyporthodus mystacinus",
-                        "Epinephelus nigritus"  = "Hyporthodus nigritus",
-                        "Epinephelus niveatus" = "Hyporthodus niveatus",
-                        "Haemulon margaritaceum" = "",
-                        "Haemulon plumieri"  = "Haemulon plumierii",
-                        # "Hymenodora rosa"  = "",
-                        "Lepidopsetta billineta" = "Lepidopsetta bilineata",
-                        # "Scadella vimbo"  = "",
-                        # "Scorpaoides xanthodes"  = "",
-                        # "Sebastes diaconus" = "",
-                        "Macrozoarces americanus"  = "Zoarces americanus")) %>% 
+  filter(!council %in% c( "CFMC")) %>% 
   # Mark CVA region
-  mutate(cva_region=recode(council_lead,
-                           "GMFMC"="Gulf of Mexico",
+  mutate(cva_region=recode(council,
+                           "GFMC"="Gulf of Mexico",
                            "MAFMC"="Northeast",
                            "NEFMC"="Northeast",
-                           "NPFMC"="North Pacific",
+                           "NPFMC"="Bering Sea",
                            "PFMC"="Pacific",
                            "SAFMC"="South Atlantic",
                            "WPFMC"="Western Pacific")) %>% 
@@ -95,39 +71,38 @@ freeR::check_names(data$species)
 # Summarize
 data_sum <- data %>% 
   # Count 
-  group_by(council_lead, fmp, vulnerability) %>% 
+  group_by(council, fmp, vulnerability) %>% 
   summarize(n=n()) %>% 
   ungroup() %>% 
   # Prop
-  group_by(council_lead, fmp) %>% 
+  group_by(council, fmp) %>% 
   mutate(prop=n/sum(n)) %>% 
   ungroup() %>% 
   # Add FMP short
-  left_join(fmp_key %>% select("fmp_long", "fmp_short"), by=c("fmp"="fmp_long")) %>% 
+  left_join(fmp_short_key %>% select("fmp", "fmp_short"), by="fmp") %>% 
   # Recode council
-  mutate(council_lead=recode_factor(council_lead,
-                                   "NEFMC"="Northeast",
-                                   "MAFMC"="Mid-Atlantic",
-                                   "SAFMC"="South\nAtlantic", 
-                                   "GMFMC"="Gulf of\nMexico",
-                                   "PFMC"="Pacific",
-                                   "NPFMC"="North\nPacific",
-                                   "WPFMC"="Western\nPacific")) %>% 
+  mutate(council=recode_factor(council,
+                               "NEFMC"="New\nEngland",
+                               "MAFMC"="Mid-Atlantic",
+                               "SAFMC"="South\nAtlantic", 
+                               "GFMC"="Gulf of\nMexico",
+                               "PFMC"="Pacific",
+                               "NPFMC"="North\nPacific",
+                               "WPFMC"="Western\nPacific")) %>% 
   # Add vulnerability score
   mutate(vulnerability_score=recode(vulnerability,
-                                    "Low"=0,
-                                    "Moderate"=1, 
-                                    "High"=2,
-                                    "Very high"=3) %>% as.numeric(.)) %>% 
-  # Remove uninteresting FMPs 
-  filter(!fmp_short %in% c("Sargassum", "Corals", "Gulf Corals"))
+                                    "Low"="0",
+                                    "Moderate"="1", 
+                                    "High"="2",
+                                    "Very high"="3") %>% as.numeric(.))
 
 # Stats
 stats <- data_sum %>% 
-  group_by(council_lead, fmp_short) %>% 
-  summarize(vulnerability_score=mean(vulnerability_score, na.rm = T)) %>% 
+  filter(!is.na(vulnerability_score)) %>% 
+  group_by(council, fmp_short) %>% 
+  summarize(vulnerability_score=mean(vulnerability_score)) %>% 
   ungroup() %>% 
-  arrange(council_lead, desc(vulnerability_score))
+  arrange(council, desc(vulnerability_score))
 
 # Order data
 data_sum_ordered <- data_sum %>% 
@@ -135,7 +110,7 @@ data_sum_ordered <- data_sum %>%
 
 # Labels
 labs <- data_sum_ordered %>% 
-  group_by(council_lead, fmp_short) %>% 
+  group_by(council, fmp_short) %>% 
   summarize(n=sum(n)) %>% 
   ungroup() %>% 
   mutate(fmp_short=factor(fmp_short, levels=stats$fmp_short))
@@ -162,7 +137,7 @@ my_theme <-  theme(axis.text=element_text(size=8),
 
 # Plot data
 g <- ggplot(data_sum_ordered, aes(y=fmp_short, x=prop, fill=vulnerability)) +
-  facet_grid(council_lead~., space="free_y", scales="free_y") +
+  facet_grid(council~., space="free_y", scales="free_y") +
   geom_bar(stat="identity", color="grey30", lwd=0.2) +
   # Sample size
   geom_text(data=labs, aes(x=1.02, y=fmp_short, label=paste0("n=", n)), hjust=0, inherit.aes = F, size=2.2, color="grey40") +
@@ -177,7 +152,7 @@ g <- ggplot(data_sum_ordered, aes(y=fmp_short, x=prop, fill=vulnerability)) +
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig12_cva_analysis.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig13_cva_analysis.png"), 
        width=6.5, height=6.5, units="in", dpi=600)
 
 

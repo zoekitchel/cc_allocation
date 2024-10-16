@@ -64,5 +64,5 @@ g <- ggplot(data, aes(y=fishery, x=catch_perc)) +
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig8_nz_qms_data.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig9_nz_qms_data.png"), 
        width=3.5, height=2, units="in", dpi=600)

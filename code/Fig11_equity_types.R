@@ -175,7 +175,7 @@ g <- gridExtra::grid.arrange(g1, g2, g3, g4, widths=c(width1, rep((1-width1)/3, 
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "Fig10_equity_schematic.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig11_equity_schematic.png"), 
        width=6.5, height=4.5, units="in", dpi=600)
  
 
