@@ -97,7 +97,8 @@ g1 <- ggplot(stats_type, aes(x=prop,
   scale_fill_ordinal(name="Spatial allocation type") +
   # Theme
   theme_bw() + my_theme +
-  theme(legend.position = c(0.8, 0.8))
+  theme(legend.position = "top",
+        legend.margin = margin(t=-5, b=-5, r=0, l=0))
 g1
 
 
@@ -126,7 +127,7 @@ cdata3 <- bind_rows(cdata1, cdata2) %>%
   separate(country, sep=" \\(", into=c("country", "perc")) %>% 
   mutate(perc=gsub("%\\)", "", perc) %>% as.numeric() / 100) %>% 
   mutate(country=recode(country, "US"="United States"),
-         country=factor(country, levels=c("United States", "Canada", "Mexico")))
+         country=factor(country, levels=c("Canada", "United States", "Mexico")))
 
 # Plot country data
 g2 <- ggplot(cdata3, aes(x=perc, y=comm_name, fill=country)) +
@@ -157,26 +158,30 @@ sdata <- pdata %>%
   # Format
   mutate(perc=gsub("%\\)", "", perc) %>% as.numeric() / 100) %>% 
   # Format states
-  mutate(state=recode_factor(state, 
-                      "ME"="Maine",
-                      "NH"="New Hampshire",
-                      "MA"="Massachusetts",
-                      "RI"="Rhode Island",
-                      "CT"="Connecticut",
-                      "ME-CT"="Conn.-Maine",
-                      "NY"="New York",
-                      "NJ"="New Jersey",
-                      "DE"="Delaware",
-                      "MD"="Maryland",
-                      "VA"="Virgina",
-                      "NC"="North Carolina",
-                      "SC"="South Carolina",
-                      "GA"="Georgia",
-                      "FL"="Florida",
-                      "AL"="Alabama",
-                      "MS"="Mississippi",
-                      "LA"="Louisiana",
-                      "TX"="Texas"))
+  mutate(state=factor(state, levels=c("ME", "NH", "MA", "RI", "CT", "ME-CT", 
+                                      "NY", "NJ", "DE", "MD", "VA",
+                                      "NC", "SC", "GA",
+                                      "FL", "AL", "MS", "LA", "TX")))
+  # mutate(state=recode_factor(state, 
+  #                     "ME"="Maine",
+  #                     "NH"="New Hampshire",
+  #                     "MA"="Massachusetts",
+  #                     "RI"="Rhode Island",
+  #                     "CT"="Connecticut",
+  #                     "ME-CT"="Conn.-Maine",
+  #                     "NY"="New York",
+  #                     "NJ"="New Jersey",
+  #                     "DE"="Delaware",
+  #                     "MD"="Maryland",
+  #                     "VA"="Virgina",
+  #                     "NC"="North Carolina",
+  #                     "SC"="South Carolina",
+  #                     "GA"="Georgia",
+  #                     "FL"="Florida",
+  #                     "AL"="Alabama",
+  #                     "MS"="Mississippi",
+  #                     "LA"="Louisiana",
+  #                     "TX"="Texas"))
 
 # Colors
 ne_cols <- RColorBrewer::brewer.pal(6, "Blues") %>% rev()
@@ -190,9 +195,10 @@ g3 <- ggplot(sdata, aes(x=perc, y=comm_name, fill=state)) +
   facet_grid(council_lead~., space="free_y", scales="free_y") +
   geom_bar(stat="identity", color="grey30") +
   # Labels
-  labs(x="Percent of quota", y="", title="State allocations", tag="C") +
+  labs(x="Percent of quota", y="", title="State allocations", tag="D") +
   # Legend
-  scale_fill_manual(name="Country", values=cols) +
+  scale_fill_manual(name="State", values=cols) +
+  guides(fill = guide_legend(ncol = 2)) +
   # Theme
   theme_bw() + my_theme
 g3
@@ -224,14 +230,18 @@ g4 <- ggplot(adata, aes(x=perc, y=comm_name, fill=area)) +
   facet_grid(council_lead~., space="free_y", scales="free_y") +
   geom_bar(stat="identity", color="grey30") +
   # Labels
-  labs(x="Percent of quota", y="", title="Area allocations", tag="D") +
+  labs(x="Percent of quota", y="", title="Area allocations", tag="F") +
   # Legend
   scale_fill_discrete(name="Area") +
   # Theme
   theme_bw() + my_theme
 g4
  
- 
+# Blanks
+gC <- ggplot() + labs(tag="C") + my_theme
+gE <- ggplot() + theme_void() + labs(tag="E") + my_theme
+gG <- ggplot() + theme_void() + labs(tag="G") + my_theme
+
 # Merge data
 #####################################
 
@@ -239,12 +249,17 @@ g4
 g <- gridExtra::grid.arrange(g2, g3, g4, ncol=1)
 
 # Merge all
-layout_matrix <- matrix(data=c(1,2,
-                               3,2), nrow=2, byrow=T)
-g_out <- gridExtra::grid.arrange(g1, g, layout_matrix=layout_matrix)
-
-# g_out <- gridExtra::grid.arrange(g1, g2, g3, g4, nrow=2)
-
+top_h <- 0.23
+layout_matrix <- matrix(data=c(1,1,
+                               2,3,
+                               4,5,
+                               6,7), ncol=2, byrow=T)
+g_out <- gridExtra::grid.arrange(g1,
+                                 g2, gC,
+                                 g3, gE,
+                                 g4, gG, layout_matrix=layout_matrix,
+                                 heights=c(top_h, rep((1-top_h)/3, 3)),
+                                 widths=c(0.6, 0.4))
 
 # Export
 ggsave(g_out, filename=file.path(plotdir, "Fig4_spatial_allocations.png"), 

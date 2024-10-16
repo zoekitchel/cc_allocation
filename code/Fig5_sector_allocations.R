@@ -125,6 +125,19 @@ data_yrs <- data %>%
   # Arrange
   arrange(council_lead, stock, period)
 
+# Format percent data for plotting
+data_yrs_plot <- data_yrs %>%
+  # Reduce to stocks of interest
+  filter(stock_orig %in% data_perc_plot$stock_orig) %>% 
+  # Recode councils
+  mutate(council_lead=recode_factor(council_lead, 
+                                    "NEFMC"="NE",
+                                    "MAFMC"='Mid-\nAtlantic',
+                                    "SAFMC"="South\nAtlantic",
+                                    "GMFMC"="Gulf of\nMexico")) %>% 
+  # Add rec percent
+  left_join(data_perc_plot %>% select(stock_orig, rec_perc_rank) %>% unique(), by="stock_orig")
+
 
 # Plot data
 ################################################################################
@@ -150,7 +163,10 @@ my_theme <-  theme(axis.text=element_text(size=6),
 
 
 # Plot percentages
-g1 <- ggplot(data=data_perc_plot, aes(x=percent, y=reorder(stock_use, desc(rec_perc_rank)), fill=sector)) +
+g1 <- ggplot(data=data_perc_plot, aes(x=percent, 
+                                      # y=reorder(stock_use, desc(rec_perc_rank)), 
+                                      y=tidytext::reorder_within(stock_use, desc(rec_perc_rank), council_lead),
+                                      fill=sector)) +
   facet_grid(council_lead~., space="free_y", scales="free_y") +
   geom_bar(stat="identity") +
   # Reference line
@@ -158,6 +174,7 @@ g1 <- ggplot(data=data_perc_plot, aes(x=percent, y=reorder(stock_use, desc(rec_p
   # Labels
   labs(x="Percent of quota", y="", tag="A", title="Explicit sector allocations") +
   scale_x_continuous(labels=scales::percent_format()) +
+  tidytext::scale_y_reordered() +
   # Legend
   scale_fill_manual(name="Sector", values=c( "#00b9ba", "#a60434")) +
   # Theme
@@ -166,11 +183,13 @@ g1 <- ggplot(data=data_perc_plot, aes(x=percent, y=reorder(stock_use, desc(rec_p
 g1
 
 # Plot reference periods
-g2 <- ggplot(data=data_yrs %>% filter(!is.na(year1))) +
+g2 <- ggplot(data=data_yrs_plot, aes(y=tidytext::reorder_within(stock, desc(rec_perc_rank), council_lead))) +
   facet_grid(council_lead~., space="free_y", scales="free_y") +
-  geom_segment(mapping=aes(x=year1, xend=year2, y=stock, color=period)) +
+  # Plot lines
+  geom_segment(mapping=aes(x=year1, xend=year2,  color=period)) +
   # Labels
   labs(x="Year", y="", tag="B", title=" ") +
+  tidytext::scale_y_reordered() +
   # Legend
   scale_color_manual(name="Reference period", values=c("black", "red")) +
   # Theme
@@ -286,14 +305,15 @@ g4 <- ggplot(data_salmon, aes(x=harvest_tot/1e6, y=perc_rec, color=stock)) +
   geom_line() +
   # Labels
   labs(x="Catch limit (millions of fish)", y="Percent to recreational fishery", tag="D", 
-       title="Pacific salmon - dynamic sector allocations") +
+       title="Dynamic sector allocations - Pacific salmon") +
   scale_y_continuous(labels=scales::percent_format(), lim=c(0,1)) +
   # Legend
   scale_color_manual(values=RColorBrewer::brewer.pal(5, "Reds")[2:5]) +
   # Theme
   theme_bw() + my_theme +
   theme(legend.position = c(0.57, 0.85),
-        legend.title = element_blank())
+        legend.title = element_blank(),
+        axis.text.y = element_text(angle = 90, hjust = 0.5))
 g4
 
 
