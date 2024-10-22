@@ -143,18 +143,50 @@ data_sa_ordered <- data_sa %>%
   mutate(stock=factor(stock, levels=stats$stock))
   
 
-# Plot data
-ggplot(data_sa_ordered, aes(y=stock, x=perc, fill=sector)) +
+# Plot set asides
+g1 <- ggplot(data_sa_ordered, aes(y=stock, x=perc, fill=sector)) +
   geom_bar(stat="identity", position = position_fill(reverse = TRUE)) +
   # Labels
-  labs(x="Percent of 2024 set aside quota", y="") +
+  labs(x="Percent of 2024 set aside quota", y="", tag="A") +
   scale_x_continuous(labels=scales::percent_format()) +
   # Legend
   scale_fill_discrete(name="Sector") +
   # Theme
   theme_bw() +
   theme(legend.position = "top")
+g1
 
 
+# Prep trawl/nontrawl percent
+data_trawl_perc <- data %>% 
+  # Filter
+  filter(!is.na(trawl_percent)) %>% 
+  # Simplify
+  select(stock, comm_name, allocation_type, trawl_percent, non_trawl_percent) %>% 
+  # Gather
+  gather(key="subsector", value="percent", 4:ncol(.)) %>% 
+  mutate(subsector=recode_factor(subsector, 
+                                 "trawl_percent"="Trawl",
+                                 "non_trawl_percent"="Non-trawl"),
+         percent=percent/100)
 
+# Order data
+stats1 <- data_trawl_perc %>% 
+  filter(subsector=="Trawl") %>% 
+  arrange(desc(percent))
+data_trawl_perc_ordered <- data_trawl_perc %>% 
+  mutate(stock=factor(stock, levels=stats1$stock))
 
+# Plot data
+g2 <- ggplot(data_trawl_perc_ordered, aes(y=stock, x=percent, fill=subsector)) +
+  facet_grid(allocation_type~., space="free_y", scales="free_y") +
+  geom_bar(stat="identity", position = position_fill(reverse = TRUE)) +
+  # Labels
+  labs(x="Percent of 2024 commercial quota", y="", tag="B") +
+  scale_x_continuous(labels=scales::percent_format()) +
+  # Legend
+  scale_fill_discrete(name="Subsector") +
+  # Theme
+  theme_bw() + 
+  theme(legend.position = "top")
+g2

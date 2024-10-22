@@ -53,7 +53,8 @@ stats_type <- data %>%
   filter(spatial_type!="none") %>% 
   # Format type
   mutate(spatial_type=stringr::str_to_sentence(spatial_type),
-         spatial_type=factor(spatial_type, levels=c("Country", "State", "Area", "Country-area")))
+         spatial_type=recode(spatial_type, "Country-area"="Country and area"),
+         spatial_type=factor(spatial_type, levels=c("Country", "State", "Area", "Country and area")))
 
 # Determine order
 stats_type_council_order <- stats_type %>% 

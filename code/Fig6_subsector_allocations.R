@@ -29,8 +29,9 @@ data <- data_orig %>%
   filter(subsector_yn=="yes") %>% 
   # Recode council
   mutate(council_lead=recode(council_lead, 
-                            "NPFMC"="North Pacific",
+                            "PFMC"="Pacific",
                             "NEFMC"="New England",
+                            "NPFMC"="North Pacific",
                             "SAFMC"="South Atlantic",
                             "MAFMC"="Mid-Atlantic",
                             "Atlantic HMS"="Atlantic HMS",
@@ -40,6 +41,7 @@ data <- data_orig %>%
 range(data$subsector_n)
 
 table(data$subsector_type)
+table(data$council_lead)
 
 # Build stats
 stats <- data %>% 
@@ -47,11 +49,12 @@ stats <- data %>%
   summarize(n=n()) %>% 
   ungroup() %>% 
   # Factor 
-  mutate(council_lead=factor(council_lead, levels=c("North Pacific", "New England", "South Atlantic", 
+  mutate(council_lead=factor(council_lead, levels=c("Pacific", "New England", "North Pacific", "South Atlantic", 
                                                     "Mid-Atlantic", "Atlantic HMS", "Gulf of Mexico"))) %>% 
   # Order type by frequency
   mutate(subsector_type=stringr::str_to_sentence(subsector_type),
-         subsector_type=factor(subsector_type, levels=c("Organizations", "Permit types", "Gears", 
+         subsector_type=gsub("Cs", "CS", subsector_type),
+         subsector_type=factor(subsector_type, levels=c("CS program participation", "Gears", 
                                                         "End uses", "Target species", "Vessel tiers", "Recreational")))
 
 
@@ -76,11 +79,11 @@ my_theme <-  theme(axis.text=element_text(size=8),
 
 # Plot subsector type
 g1 <- ggplot(stats, aes(y=council_lead, x=n, fill=subsector_type)) +
-  geom_bar(stat="identity") + 
+  geom_bar(stat="identity", color="grey30", lwd=0.2) + 
   # Labels
   labs(x="Number of stocks", y="", tag="A") +
   # Legend
-  scale_fill_discrete(name="Subsector type\n(in decreasing frequency)") +
+  scale_fill_manual(name="Subsector type\n(in decreasing frequency)", values=RColorBrewer::brewer.pal(6, "Set1")) +
   # Theme
   theme_bw() + my_theme +
   theme(legend.position=c(0.6, 0.7),

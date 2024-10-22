@@ -14,7 +14,8 @@ datadir <- "data/database/processed"
 plotdir <- "figures"
 
 # Read data
-data <- readRDS(file.path(datadir, "quota_allocations_database.Rds"))
+data <- readRDS(file.path(datadir, "quota_allocations_database.Rds")) %>% 
+  filter(council_lead!="IPHC")
 
 # Theme
 base_theme <- theme(axis.text=element_text(size=7),
@@ -54,15 +55,19 @@ stats1 <- data %>%
                            "season_yn"="Seasonal", 
                            "shares_yn"="Catch shares"))  %>% 
   # Arrange
-  arrange(desc(p))
+  arrange(desc(p)) %>% 
+  # Add label
+  mutate(label=paste0(round(p*100,1), "% (", n, " stocks)"))
 
 
 # Plot overall
 g1 <- ggplot(stats1, aes(y=reorder(alloc_type, desc(p)), x=p)) +
   geom_bar(stat="identity") +
+  # Label
+  geom_text(mapping=aes(label=label), hjust=-0.1, size=2, color="grey60") +
   # Labels
   labs(x="Percent of stocks", y="", tag="A") +
-  scale_x_continuous(labels=scales::percent) +
+  scale_x_continuous(labels=scales::percent, lim=c(0,0.55)) +
   # Theme
   theme_bw() + base_theme
 g1

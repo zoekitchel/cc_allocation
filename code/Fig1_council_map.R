@@ -25,6 +25,9 @@ colors <- c("#1f78b4", "#a6cee3", "#ff7f00", "#e31a1c",
 eez_us <- readRDS("data/fmc_regions/US_EEZ_by_council.Rds") %>% 
   mutate(council=factor(council, levels=councils))
 
+# Read database for stock totals
+data <- readRDS("data/database/processed/quota_allocations_database.Rds")
+table(data$council_lead)
 
 # Build data
 ################################################################################

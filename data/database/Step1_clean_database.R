@@ -64,7 +64,7 @@ data <- data_orig %>%
                              "yes-no-no"="country",
                              "yes-no-yes"="country-area")) %>% 
   # Add sector columns
-  mutate(sector_yn=ifelse(!is.na(sector_list), "yes", "no"),
+  mutate(sector_yn=ifelse(!is.na(sector_list) | !is.na(sector_setasides), "yes", "no"),
          sector_n=count_items(sector_list)) %>%  
   # Clean subsector lists
   mutate(subsector_list_rec=gsub(";", ",", subsector_list_rec),
@@ -89,7 +89,7 @@ data <- data_orig %>%
          country_yn, country_n, country_list, country_notes,
          state_yn, state_n, state_list, state_yrs, state_notes,
          area_yn, area_n, area_list, 
-         sector_yn, sector_type, sector_n, sector_list, sector_yrs, sector_notes,
+         sector_yn, sector_type, sector_setasides, sector_n, sector_list, sector_yrs, sector_notes,
          subsector_yn, subsector_type, subsector_n, subsector_yrs, subsector_notes,
          subsector_comm_yn, subsector_comm_n, subsector_list_comm,
          subsector_rec_yn, subsector_rec_n, subsector_list_rec,
