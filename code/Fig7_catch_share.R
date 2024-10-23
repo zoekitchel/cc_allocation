@@ -166,6 +166,7 @@ catch_share_full <- cowplot::plot_grid(catch_share_start_end_input_years.l + the
                                        ncol = 2, labels = c("a.","b."))
 
 ggsave(catch_share_full, path = "figures",filename = "catch_share_full.jpg", width = 10, height = 6, units = "in")
+ggsave(catch_share_full, path = "figures",filename = "catch_share_full.jpg", width = 10, height = 6, units = "in")
 
 
 
