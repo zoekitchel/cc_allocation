@@ -108,5 +108,6 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "Fig6_subsector_allocations.png"), 
        width=6.5, height=2.5, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig6_subsector_allocations.pdf"), 
+       width=6.5, height=2.5, units="in", dpi=600)
 

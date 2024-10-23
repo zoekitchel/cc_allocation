@@ -33,7 +33,8 @@ data <- data_orig %>%
   select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
          sector_yn:sector_notes) %>% 
   # Reduce to stocks with sector allocations
-  filter(sector_yn=="yes")
+  filter(sector_yn=="yes") %>% 
+  filter(council_lead!="PFMC") #### TEMPORARY!!! REMOVE!!!
 
 # Build percent data
 data_perc <- data %>% 
@@ -333,7 +334,8 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "Fig5_sector_allocations.png"), 
        width=6.5, height=7, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig5_sector_allocations.pdf"), 
+       width=6.5, height=7, units="in", dpi=600)
 
 
 

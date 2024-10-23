@@ -66,3 +66,5 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "Fig9_nz_qms_data.png"), 
        width=3.5, height=2, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig9_nz_qms_data.pdf"), 
+       width=3.5, height=2, units="in", dpi=600)

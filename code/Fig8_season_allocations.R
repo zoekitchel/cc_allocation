@@ -91,7 +91,8 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.png"),
        width=6.5, height=3.5, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.pdf"),
+       width=6.5, height=3.5, units="in", dpi=600)
 
 
 
