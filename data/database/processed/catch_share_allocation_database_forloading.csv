@@ -1,0 +1,39 @@
+﻿short_program_name,share_program,years_dependency,council_lead,fmp,num_species,shares_basis_text,shares_start_yr,shares_basis_historical_start,shares_basis_historical_end,shares_basis,cap_type,cap_text,cap_min,cap_max
+AI Pollock,Aleutian Islands Pollock,NA,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,Managed by Aleut Corporation,2005,NA,NA,NA,NA,NA,NA,NA
+Atlantic Sea Scallops IFQ,Atlantic Sea Scallops IFQ,Fully,NEFMC,Atlantic Sea Scallop,single,NA,2010,2000,2004,historical,individual_vessel_use,NA,2.5,2.5
+Atlantic Sea Scallops IFQ,Atlantic Sea Scallops IFQ,Fully,NEFMC,Atlantic Sea Scallop,single,NA,2010,2000,2004,historical,individual_holding,NA,5,5
+BS AFA Pollock Cooperative (Inshore),Bering Sea AFA Pollock Cooperative (Inshore),Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,1999,1995,1997,historical,processor_holdings,NA,30,30
+BS AFA Pollock Cooperative (Inshore),Bering Sea AFA Pollock Cooperative (Inshore),Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,1999,1995,1997,historical,individual_vessel_use,NA,17.5,17.5
+BSAI Groundfish Cooperatives (Amendment 80),Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,multiple,NA,2008,1998,2004,historical,individual_holding,NA,30,30
+BSAI Groundfish Cooperatives (Amendment 80),Bering Sea and Aleutian Islands Groundfish (Non-Pollock) Cooperatives - Amendment 80,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,multiple,NA,2008,1998,2004,historical,individual_vessel_use,NA,20,20
+BSAI King and Tanner Crab,Bering Sea and Aleutian Islands King and Tanner Crab,Fully,NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,multiple,NA,2005,1991,2000,historical,individual_holding,NA,1,10
+BSAI King and Tanner Crab,Bering Sea and Aleutian Islands King and Tanner Crab,Fully,NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,multiple,NA,2005,1991,2000,historical,individual_vessel_use,NA,2,20
+BSAI King and Tanner Crab,Bering Sea and Aleutian Islands King and Tanner Crab,Fully,NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,multiple,NA,2005,1991,2000,historical,processor_holdings,NA,60,60
+BSAI King and Tanner Crab,Bering Sea and Aleutian Islands King and Tanner Crab,Fully,NPFMC,Bering Sea/Aleutian Islands King and Tanner Crabs,multiple,NA,2005,1991,2000,historical,crew_holding,NA,2,2
+Central GOA Rockfish,Central Gulf of Alaska Rockfish,Fully,NPFMC,Groundfish of the Gulf of Alaska,multiple,NA,2007,2000,2006,historical,individual_holding,NA,4,40
+Central GOA Rockfish,Central Gulf of Alaska Rockfish,Fully,NPFMC,Groundfish of the Gulf of Alaska,multiple,NA,2007,2000,2006,historical,processor_holdings,NA,30,30
+Central GOA Rockfish,Central Gulf of Alaska Rockfish,Fully,NPFMC,Groundfish of the Gulf of Alaska,multiple,NA,2007,2000,2006,historical,individual_vessel_use,NA,8,8
+Central GOA Rockfish,Central Gulf of Alaska Rockfish,Fully,NPFMC,Groundfish of the Gulf of Alaska,multiple,NA,2007,2000,2006,historical,cooperative_use,NA,30,30
+Golden Tilefish,Golden Tilefish,Partly,MAFMC,Tilefish,single,NA,2009,2001,2005,historical,individual_vessel_use,NA,49,49
+Grouper and Tilefish,Grouper and Tilefish,Fully,GMFMC,Reef Fish Resources of the Gulf of Mexico,multiple,NA,2010,1999,2004,historical,individual_vessel_use,NA,2.3,14.7
+Grouper and Tilefish,Grouper and Tilefish,Fully,GMFMC,Reef Fish Resources of the Gulf of Mexico,multiple,NA,2010,1999,2004,historical,individual_holding,NA,2.3,14.7
+IFQ Halibut and Sablefish,Individual Fishing Quota Halibut and Sablefish,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area / Groundfish of the Gulf of Alaska,two,NA,1995,1984,1990,historical,individual_holding,NA,1,1
+IFQ Halibut and Sablefish,Individual Fishing Quota Halibut and Sablefish,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area / Groundfish of the Gulf of Alaska,two,NA,1995,1984,1990,historical,individual_vessel_use,NA,1,1
+Individual Bluefin Tuna Quota,Individual Bluefin Tuna Quota,Fully,Atlantic HMS,Consolidated Atlantic Highly Migratory Species,single,NA,2015,2006,2012,historical,individual_holding,NA,25,25
+Individual Bluefin Tuna Quota,Individual Bluefin Tuna Quota,Fully,Atlantic HMS,Consolidated Atlantic Highly Migratory Species,single,NA,2015,2006,2012,historical,individual_vessel_use,NA,25,25
+New England Multispecies Sectors,New England Multispecies Sectors,Fully,NEFMC,Northeast Multispecies,multiple,NA,2010,1996,2006,historical,NA,NA,NA,NA
+Pacific Cod Trawl Catcher Program,Pacific Cod Trawl Catcher Program,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,2024,2009,2019,historical,individual_holding,NA,5,5
+Pacific Cod Trawl Catcher Program,Pacific Cod Trawl Catcher Program,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,2024,2009,2019,historical,individual_vessel_use,NA,5,5
+Pacific Cod Trawl Catcher Program,Pacific Cod Trawl Catcher Program,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,2024,2009,2019,historical,processor_holdings,NA,20,20
+Pacific Cod Trawl Catcher Program,Pacific Cod Trawl Catcher Program,Fully,NPFMC,Groundfish of the Bering Sea and Aleutian Islands Management Area,single,NA,2024,2009,2019,historical,processor_use,NA,20,20
+Red Snapper,Red Snapper,Fully,GMFMC,Reef Fish Resources of the Gulf of Mexico,single,NA,2007,1990,2005,historical,individual_holding,NA,6,6
+Surf Clam and Ocean Quahog,Surf Clam and Ocean Quahog,Partly,MAFMC,Atlantic Surfclam and Ocean Quahog,multiple,NA,1990,1979,1988,historical,individual_holding,NA,35,40
+Surf Clam and Ocean Quahog,Surf Clam and Ocean Quahog,Partly,MAFMC,Atlantic Surfclam and Ocean Quahog,multiple,NA,1990,1979,1988,historical,individual_vessel_use,cage tags,NA,NA
+US Pacific Sablefish Permit Stacking Program,US Pacific Sablefish Permit Stacking Program,Fully,PFMC,Pacific Coast Groundfish,single,NA,2002,1984,1994,historical,individual_vessel_use,3 permits per vessel,NA,NA
+Voluntary Weathervane Scallop Cooperative,Voluntary Weathervane Scallop Cooperative,NA,NPFMC,Scallop Fishery off Alaska,single,Annual negotiations,2000,NA,NA,NA,,NA,NA,NA
+West Coast Groundfish Trawl (shoreside sector),West Coast Groundfish Trawl Catch Share Program (shoreside sector),Fully,PFMC,Pacific Coast Groundfish,multiple,NA,2011,1994,2003,historical,individual_holding,NA,2.5,17.7
+West Coast Groundfish Trawl (shoreside sector),West Coast Groundfish Trawl Catch Share Program (shoreside sector),Fully,PFMC,Pacific Coast Groundfish,multiple,NA,2011,1998,2004,historical_processor,NA,NA,NA,NA
+West Coast Groundfish Trawl (shoreside sector),West Coast Groundfish Trawl Catch Share Program (shoreside sector),Fully,PFMC,Pacific Coast Groundfish,multiple,NA,2011,1994,2003,historical,individual_vessel_use,NA,3.9,20
+Western Alaska Community Development Quota,Western Alaska Community Development Quota,NA,NPFMC,NA,multiple,Decennial applications by CDQ groups,1992,NA,NA,NA,NA,NA,NA,NA
+Wreckfish,Wreckfish,Fully,SAFMC,Snapper-Grouper Fishery of the South Atlantic Region,single,NA,1991,1987,1990,historical,individual_holding,NA,49,49
+Wreckfish,Wreckfish,Fully,SAFMC,Snapper-Grouper Fishery of the South Atlantic Region,single,NA,1991,2006,2011,recent,NA,NA,NA,NA
