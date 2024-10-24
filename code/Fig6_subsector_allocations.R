@@ -86,7 +86,7 @@ g1 <- ggplot(stats, aes(y=council_lead, x=n, fill=subsector_type)) +
   scale_fill_manual(name="Subsector type\n(in decreasing frequency)", values=RColorBrewer::brewer.pal(6, "Set1")) +
   # Theme
   theme_bw() + my_theme +
-  theme(legend.position=c(0.6, 0.7),
+  theme(legend.position=c(0.6, 0.72),
         legend.key.size = unit(0.25, "cm"))
 g1
 

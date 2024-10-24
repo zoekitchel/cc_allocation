@@ -2,6 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+
 # Ignore folders
 admin
 *.DS_Store
+policy_reviews
