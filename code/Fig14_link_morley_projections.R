@@ -5,6 +5,10 @@
 
 # PURPOSE: Link Morley projections with catch share database
 
+#If this is the first time you're running this, or you want to update species names from taxize, set use_get_taxa = T, otherwise, keep use_get_taxa = F
+
+use_get_taxa = F
+
 #############################
 ##Setup
 #############################
@@ -12,8 +16,10 @@ library(data.table)
 library(stringr)
 library(ggplot2)
 
-source(file.path("functions","return_spptaxonomy_function.R"))
 
+if(use_get_taxa == T){
+source(file.path("functions","return_spptaxonomy_function.R"))
+}
 ########################
 ##Load data
 ########################
@@ -57,12 +63,16 @@ source(file.path("functions","return_spptaxonomy_function.R"))
 ########################
     
 #####Check taxonomy of Morley projections
-  #  projection_taxa <- get_taxa(unique(morley_projections$species))
+    if(use_get_taxa == T){
+    projection_taxa <- get_taxa(unique(morley_projections$species))
     
       #Save, this takes a bit
-   #   saveRDS(projection_taxa, file.path("data","morley","processed","projection_taxa.Rds"))
-      
+      saveRDS(projection_taxa, file.path("data","morley","processed","projection_taxa.Rds"))
+    }
+    #If working from github and no need to update, just load from repository
+    if(use_get_taxa == F){
       projection_taxa <- readRDS(file.path("data","morley","processed","projection_taxa.Rds"))
+    }
     
     #Link "correct species name" back to morley projections by spp
     morley_projections_clean <- projection_taxa[morley_projections, on = c("query" = "species")]
@@ -80,14 +90,18 @@ source(file.path("functions","return_spptaxonomy_function.R"))
     morley_projections_clean[query == "Nearchaster aciculosus"]$worms_id <- 380816
     
 #####Check taxonomy of FMPs
+    if(use_get_taxa == T){
     #Check FMP taxonomy to match with database, and projections
-   # fmp_taxa_clean <- get_taxa(unique(US_FMP_species_list.r$species))
+    fmp_taxa_clean <- get_taxa(unique(US_FMP_species_list.r$species))
     
     #Save, this takes a bit
-  #  saveRDS(fmp_taxa_clean, file.path("data","fmps","fmp_taxa_clean.Rds"))
+    saveRDS(fmp_taxa_clean, file.path("data","fmps","fmp_taxa_clean.Rds"))
+    }
     
+    #Otherwise, load from repository
+    if(use_get_taxa == F){
     fmp_taxa_clean <- readRDS(file.path("data","fmps","fmp_taxa_clean.Rds"))
-    
+    }
     #Reduce to essential columns (fishbase ID, species name)
     fmp_taxa_clean.r <- fmp_taxa_clean[,.(query,worms_id, taxa,common_name)]
     
@@ -118,13 +132,16 @@ source(file.path("functions","return_spptaxonomy_function.R"))
                                      value.name = "species",
                                      na.rm = T)
     
-   # stock_spp_clean <- get_taxa(unique(stock_name_species_key.l$species))
+  #  If first time, run get taxa function, if not, just pull from repository
+    if(use_get_taxa == T){
+    stock_spp_clean <- get_taxa(unique(stock_name_species_key.l$species))
     
     #Save, this takes a bit
-  #  saveRDS(stock_spp_clean, file.path("data","database","stock_spp_clean.Rds"))
-    
+    saveRDS(stock_spp_clean, file.path("data","database","stock_spp_clean.Rds"))
+    }
+    if(use_get_taxa == F){
     stock_spp_clean <- readRDS(file.path("data","database","stock_spp_clean.Rds"))
-    
+    }
     #Which did not match up?
     setdiff(unique(stock_name_species_key.l$species), stock_spp_clean$query)
 
