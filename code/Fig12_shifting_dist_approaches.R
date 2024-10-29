@@ -170,7 +170,10 @@ g
 # Export
 ggsave(g, filename=file.path(plotdir, "Fig12_shifting_dist_approaches.png"), 
        width=6.5, height=3, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig12_shifting_dist_approaches.pdf"), 
+       width=6.5, height=3, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig12_shifting_dist_approaches.tiff"), 
+       width=6.5, height=3, units="in", dpi=600)
 
 
 

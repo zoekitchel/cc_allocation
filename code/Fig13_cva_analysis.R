@@ -156,5 +156,6 @@ ggsave(g, filename=file.path(plotdir, "Fig13_cva_analysis.png"),
        width=6.5, height=6.5, units="in", dpi=600)
 ggsave(g, filename=file.path(plotdir, "Fig13_cva_analysis.pdf"), 
        width=6.5, height=6.5, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig13_cva_analysis.tiff"), 
+       width=6.5, height=6.5, units="in", dpi=600)
 

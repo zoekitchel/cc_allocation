@@ -202,4 +202,7 @@ g <- gridExtra::grid.arrange(g2, g1, g3,
 # Export plot
 ggsave(g, filename=file.path(plotdir, "Fig1_council_map.png"), 
        width=6.5, height=3, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig1_council_map.pdf"), 
+       width=6.5, height=3, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig1_council_map.tiff"), 
+       width=6.5, height=3, units="in", dpi=600)

@@ -382,4 +382,5 @@ ggsave(g_out, filename=file.path(plotdir, "Fig4_spatial_allocations.png"),
        width=6.5, height=6.5, units="in", dpi=600)
 ggsave(g_out, filename=file.path(plotdir, "Fig4_spatial_allocations.pdf"), 
        width=6.5, height=6.5, units="in", dpi=600)
-
+ggsave(g_out, filename=file.path(plotdir, "Fig4_spatial_allocations.tiff"), 
+       width=6.5, height=6.5, units="in", dpi=600)

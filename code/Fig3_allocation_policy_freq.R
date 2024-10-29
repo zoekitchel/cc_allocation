@@ -141,4 +141,6 @@ ggsave(g, filename=file.path(plotdir, "Fig3_policy_frequency.png"),
        width=6.5, height=5.5, units="in", dpi=600)
 ggsave(g, filename=file.path(plotdir, "Fig3_policy_frequency.pdf"), 
        width=6.5, height=5.5, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "Fig3_policy_frequency.tiff"), 
+       width=6.5, height=5.5, units="in", dpi=600)
 

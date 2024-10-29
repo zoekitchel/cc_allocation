@@ -336,6 +336,7 @@ ggsave(g, filename=file.path(plotdir, "Fig5_sector_allocations.png"),
        width=6.5, height=7, units="in", dpi=600)
 ggsave(g, filename=file.path(plotdir, "Fig5_sector_allocations.pdf"), 
        width=6.5, height=7, units="in", dpi=600)
-
+ggsave(g, filename=file.path(plotdir, "Fig5_sector_allocations.tiff"), 
+       width=6.5, height=7, units="in", dpi=600)
 
 
