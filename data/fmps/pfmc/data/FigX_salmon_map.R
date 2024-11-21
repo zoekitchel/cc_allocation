@@ -44,10 +44,15 @@ my_theme <-  theme(axis.text=element_text(size=6),
 
 # Plot it
 g <- ggplot() + 
+  # Elk River point
+  geom_hline(yintercept = 42.806504, linetype="dashed") +
+  annotate(geom="text", x=-128.2, y=42.806504, label="Elk River", size=2.2, vjust=-0.4, hjust=0) +
   # Leadbetter point
   geom_hline(yintercept = 46.659951, linetype="dashed") +
+  annotate(geom="text", x=-128.2, y=46.659951, label="Leadbetter Pt.", size=2.2, vjust=-0.4, hjust=0) +
   # Cape Falcon
   geom_hline(yintercept = 45.767667, linetype="dashed") +
+  annotate(geom="text", x=-128.2, y=45.767667, label="Cape Falcon", size=2.2, vjust=-0.4, hjust=0) +
   # Plot data
   geom_sf(data = foreign, fill="grey90", color="white", lwd=0.2) + 
   geom_sf(data = usa, fill="grey90", color="white", lwd=0.2) + 
