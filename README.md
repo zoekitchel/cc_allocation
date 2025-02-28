@@ -11,16 +11,16 @@ Please email Chris Free (cfree14@gmail.com) with any questions.
 
 The repository is structured as follows:
 
-- **data:** data used in the paper; subfolders include:
-  - **raw:** raw data
-  - **processed:** processed data
-  - **figures:** visualizations of the processed data
-  - code to clean the raw data and export/visualize the processed data
-- **code:** code to conduct analyses and create tables and figures for paper
-- **tables:** tables for the paper
-- **figures:** figures for the paper
-- **drafts:** drafts of the report and paper (confidential)
-- **admin:** administrative files (confidential)
+ * **data:** data used in the paper; subfolders include:
+   * **raw:** raw data
+   * **processed:** processed data
+   * **figures:** visualizations of the processed data
+   * code to clean the raw data and export/visualize the processed data
+ *  **code:** code to conduct analyses and create tables and figures for paper
+ * **tables:** tables for the paper
+ * **figures:** figures for the paper
+ * **drafts:** drafts of the report and paper (confidential)
+ * **admin:** administrative files (confidential)
 
   Readers will likely be especially interested in the allocation policy database and summaries. These are located in the following place:
 
