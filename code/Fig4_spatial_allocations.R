@@ -23,6 +23,13 @@ data_yrs <- readxl::read_excel(file.path(datadir, "spatial_database.xlsx"))
 # Build data
 ################################################################################
 
+dynamic_stocks <- c("Black sea bass - Mid-Atlantic Coast",
+                    "Summer flounder - Mid-Atlantic Coast",
+                    "Yellowtail flounder - Georges Bank",
+                    "Atlantic cod - Georges Bank", 
+                    "Haddock - Georges Bank")
+transfer_stocks <- c("Bluefish - Atlantic Coast")
+
 # Build data
 data <- data_orig %>% 
   # Simplify columns
@@ -36,7 +43,11 @@ data <- data_orig %>%
                              "NPFMC"="North Pacific",
                              "NEFMC"="New England",
                              "MAFMC"="Mid-Atlantic",
-                             "GMFMC"="Gulf of Mexico"))
+                             "GMFMC"="Gulf of Mexico")) %>% 
+  # Mark dynamic
+  mutate(comm_name=case_when(stock %in% dynamic_stocks ~ paste0(comm_name, "*"), 
+                             stock %in% transfer_stocks ~ paste0(comm_name, "†"),
+                             T ~ comm_name))
 
 
 # Type stats

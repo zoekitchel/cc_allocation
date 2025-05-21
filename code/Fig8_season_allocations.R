@@ -37,7 +37,10 @@ data <- data_orig %>%
   mutate(percent_label=paste0(percent*100, "%")) %>% 
   # Arrange
   arrange(council, fmp, species) %>% 
-  mutate(order=1:n()) 
+  mutate(order=1:n()) %>% 
+  # Mark herring
+  mutate(species=recode(species,
+                        "Atlantic herring"="Atlantic herring*"))
   
 
 # Plot data

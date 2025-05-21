@@ -57,17 +57,24 @@ stats1 <- data %>%
   # Arrange
   arrange(desc(p)) %>% 
   # Add label
-  mutate(label=paste0(round(p*100,1), "% (", n, " stocks)"))
+  mutate(label=paste0(round(p*100,1), "% (", n, " stocks)")) %>% 
+  # Factor type
+  mutate(alloc_type=factor(alloc_type))
+
+# Colors
+colors <- c("grey30", RColorBrewer::brewer.pal(5, "Set3"))
 
 
 # Plot overall
-g1 <- ggplot(stats1, aes(y=reorder(alloc_type, desc(p)), x=p)) +
+g1 <- ggplot(stats1, aes(y=reorder(alloc_type, desc(p)), x=p, fill=alloc_type)) +
   geom_bar(stat="identity") +
   # Label
   geom_text(mapping=aes(label=label), hjust=-0.1, size=2, color="grey60") +
   # Labels
   labs(x="Percent of stocks", y="", tag="A") +
   scale_x_continuous(labels=scales::percent, lim=c(0,0.55)) +
+  # Legend
+  scale_fill_manual(values=colors, guide="none") +
   # Theme
   theme_bw() + base_theme
 g1
@@ -121,12 +128,14 @@ stats2_ordered <- stats2 %>%
   mutate(council_lead=factor(council_lead, levels=council_order$council_lead))
 
 # Plot data
-g2 <- ggplot(stats2_ordered, aes(y=council_lead, x=p)) +
+g2 <- ggplot(stats2_ordered, aes(y=council_lead, x=p, fill=alloc_type)) +
   facet_wrap(~alloc_type, scales="free_x") +
   geom_bar(stat="identity") +
   # Labels
   labs(x="Percent of stocks", y="", tag="B") +
   scale_x_continuous(labels=scales::percent) +
+  # Legend
+  scale_fill_manual(values=colors, guide="none") +
   # Theme
   theme_bw() + base_theme
 g2

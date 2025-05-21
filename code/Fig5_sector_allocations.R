@@ -34,8 +34,8 @@ data <- data_orig %>%
          sector_yn:sector_notes) %>% 
   # Reduce to stocks with sector allocations
   filter(sector_yn=="yes") %>% 
-  filter(council_lead!="PFMC") #### TEMPORARY!!! REMOVE!!!
-
+  filter(council_lead!="PFMC") #### TEMPORARY!!! REMOVE!!! 
+  
 # Build percent data
 data_perc <- data %>% 
   # Simplify
@@ -89,7 +89,8 @@ data_perc_plot <- data_perc %>%
          stock_use=gsub(" - Gulf of Mexico", "", stock_use),
          stock_use=recode(stock_use,
                           "Shallow Water Grouper Complex"="Shallow water groupers",
-                          "Deep Water Grouper Complex"="Deep water groupers")) %>% 
+                          "Deep Water Grouper Complex"="Deep water groupers",
+                          "Bluefish"="Bluefish†")) %>% 
   # Add plotting order
   group_by(council_lead, stock_use) %>% 
   mutate(rec_perc=percent[sector=="Recreational"]) %>% 
@@ -306,7 +307,7 @@ g4 <- ggplot(data_salmon, aes(x=harvest_tot/1e6, y=perc_rec, color=stock)) +
   geom_line() +
   # Labels
   labs(x="Catch limit (millions of fish)", y="Percent to recreational fishery", tag="D", 
-       title="Dynamic sector allocations - Pacific salmon") +
+       title="Dynamic sector allocations - Pacific salmon*") +
   scale_y_continuous(labels=scales::percent_format(), lim=c(0,1)) +
   # Legend
   scale_color_manual(values=RColorBrewer::brewer.pal(5, "Reds")[2:5]) +
