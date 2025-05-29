@@ -35,6 +35,10 @@ base_theme <- theme(axis.text=element_text(size=7),
 # Overall
 ################################################################################
 
+# Stocks by FMP
+stats <- data %>% 
+  count(council_lead, fmp)
+
 # Overall
 stats1 <- data %>% 
   # Simplify
@@ -87,7 +91,7 @@ g1
 # Overall
 stats2 <- data %>% 
   # Simplify
-  select(council_lead, stock, allocation_yn_use, spatial_yn, sector_yn, subsector_yn, season_yn, shares_yn) %>% 
+  select(council_lead, stock, allocation_yn, spatial_yn, sector_yn, subsector_yn, season_yn, shares_yn) %>% 
   # Gather
   gather(key="alloc_type", value="alloc_yn", 3:ncol(.)) %>% 
   # Summarize
@@ -97,7 +101,7 @@ stats2 <- data %>%
             p=n/n_tot) %>% 
   # Format type
   mutate(alloc_type=recode(alloc_type,
-                           "allocation_yn_use"="Any type", 
+                           "allocation_yn"="Any type", 
                            "spatial_yn"="Spatial", 
                            "sector_yn"="Sector", 
                            "subsector_yn"="Subsector", 

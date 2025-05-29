@@ -84,8 +84,9 @@ table(data$spatial_type)
 # Setup theme
 my_theme <-  theme(axis.text=element_text(size=6),
                    axis.title=element_text(size=7),
-                   legend.text=element_text(size=6),
-                   legend.title=element_text(size=7),
+                   axis.title.y=element_blank(),
+                   legend.text=element_text(size=5.5),
+                   legend.title=element_text(size=6.5),
                    strip.text=element_text(size=7),
                    plot.title=element_text(size=7, margin=margin(b = 1, unit = "pt")),
                    plot.tag=element_text(size=7),
@@ -97,7 +98,7 @@ my_theme <-  theme(axis.text=element_text(size=6),
                    panel.background = element_blank(), 
                    axis.line = element_line(colour = "black"),
                    # Legend
-                   legend.key.size = unit(0.3, "cm"),
+                   legend.key.size = unit(0.2, "cm"),
                    legend.key = element_rect(fill = NA, color=NA),
                    legend.background = element_rect(fill=alpha('blue', 0)))
 
@@ -128,8 +129,9 @@ data_yrs_plot <- data_yrs %>%
                                "New England"="NE",
                                "Mid-Atlantic"="Mid-Atlantic",
                                "South Atlantic"="South Atlantic",
-                               "Gulf of Mexico"="GoM",
-                               "Pacific"="Pacific")) %>% 
+                               "Gulf of Mexico"="GM",
+                               "Pacific"="Pacific",
+                               "North Pacific"="North Pacific")) %>% 
   # Order basis
   mutate(basis=factor(basis, levels=c("Landings", "Fish spotter", "CalCOFI larvae")))
 
@@ -187,7 +189,7 @@ g7
 ################################################################################
 
 # Max char
-nchar_max <- nchar("King mackerel (Gulf of Mexico)") + 7
+nchar_max <- nchar("Blackspotted/rougheye rockfish*") + 7
 
 # Build data
 pdata <- data %>% 
@@ -226,11 +228,12 @@ g2 <- ggplot(cdata3, aes(x=perc, y=comm_name, fill=country)) +
   labs(x="Percent of quota", y="", title="Country allocations", tag="B") +
   scale_x_continuous(labels=scales::percent_format()) +
   # Legend
-  scale_fill_manual(name="Country                   ", values=c("#3182BD", "#74C476", "#DE2D26")) +
+  scale_fill_manual(name="Country                    ", values=c("#3182BD", "#74C476", "#DE2D26")) +
   # Theme
   theme_bw() + my_theme +
   theme(axis.title.x = element_blank(),
         plot.margin=margin(t=0, r=2, b=2, l=4),
+        legend.margin=margin(l=-2, r=0, t=0, b=0),
         legend.title=element_text(size=7, margin=margin(b = 2, unit = "pt")))
 g2
 
@@ -280,7 +283,7 @@ sdata <- pdata %>%
   # Format councils
   mutate(council_lead=recode_factor(council_lead,
                                     "Mid-Atlantic"="Mid-Atlantic",
-                                    "Gulf of Mexico"="GoM"))
+                                    "Gulf of Mexico"="GM"))
 
 # Colors
 ne_cols <- RColorBrewer::brewer.pal(6, "Blues") %>% rev()
@@ -301,11 +304,12 @@ g3 <- ggplot(sdata, aes(x=perc, y=comm_name, fill=state)) +
   labs(x="Percent of quota", y="", title="State allocations", tag="C") +
   scale_x_continuous(labels=scales::percent_format()) +
   # Legend
-  scale_fill_manual(name="State", values=cols) +
+  scale_fill_manual(name="State                         ", values=cols) +
   guides(fill = guide_legend(ncol = 2)) +
   # Theme
   theme_bw() + my_theme +
   theme(axis.title.x = element_blank(),
+        legend.margin=margin(l=-2, r=0, t=0, b=0),
         plot.margin=margin(t=0, r=2, b=2, l=4),
         legend.title=element_text(size=7, margin=margin(b = 2, unit = "pt")))
 g3
@@ -317,6 +321,7 @@ g3
 # Build area data
 adata <- pdata %>% 
   filter(type=="area_list") %>% 
+  mutate(values=gsub("; ", ", ", values)) %>% 
   separate(values, sep=", ", into=paste0("state", 1:14), remove=T) %>% 
   # Gather
   gather(key="type", value="values", 8:ncol(.)) %>% 
@@ -331,6 +336,7 @@ adata <- pdata %>%
   # Format comm name
   mutate(comm_name=case_when(stock=="King mackerel - Southern Atlantic Coast" ~ "King mackerel (South Atlantic)",
                              stock=="King mackerel - Gulf of Mexico" ~ "King mackerel (Gulf of Mexico)",
+                             stock=="Blackspotted and Rougheye Rockfish Complex - Gulf of Alaska" ~ "Blackspotted/rougheye rockfish",
                              T ~ comm_name)) %>% 
   # Pad common name
   # mutate(comm_name=stringr::str_pad(comm_name, width=nchar_max, side="left", pad=" ")) %>% 
@@ -339,25 +345,36 @@ adata <- pdata %>%
                                     "New England"="NE",
                                     "South Atlantic"="South Atlantic")) %>% 
   # Format area names
-  mutate(area=recode_factor(area,
-                            "1A"="Herring 1A",
-                            "1B"="Herring 1B",
-                            "2"="Herring 2",
-                            "3"="Herring 3",
-                            "Northern Zone"="SA Northern",
-                            "Southern Zone"="SA Southern",
-                            "Northern"="GoM Northern",
-                            "Southern"="GoM Southern",
-                            "Western"="GoM Western",
-                            "South Atlantic"="South Atlantic",
-                            "Gulf of Mexico"="Gulf of Mexico"))
+  mutate(area=ifelse(council_lead=="North Pacific" & area=="Western", "GOA Western", area),
+         area=recode_factor(area,
+                "1A"="Herring 1A",
+                "1B"="Herring 1B",
+                "2"="Herring 2",
+                "3"="Herring 3",
+                "Northern Zone"="SA Northern",
+                "Southern Zone"="SA Southern",
+                "Northern"="GOM Northern",
+                "Southern"="GOM Southern",
+                "Western"="GOM Western",
+                "South Atlantic"="South Atlantic",
+                "Gulf of Mexico"="Gulf of Mexico",
+                "West Yakutat"="GOA West Yakutat",
+                "GOA Western"="GOA Western",
+                "Western/Central"="GOA Western/Central",
+                "Central"="GOA Central",
+                "Eastern"="GOA Eastern",
+                "Southeast Outside District"="GOA SE Outside")) %>% 
+  # Mark dynamic
+  mutate(comm_name=ifelse(council_lead=="North Pacific", paste0(comm_name, "*"), comm_name))
 
 # Area colors
 area_colors <- c(RColorBrewer::brewer.pal(4, "Blues"),
                  RColorBrewer::brewer.pal(3, "Greens")[1:2],
                  RColorBrewer::brewer.pal(4, "Reds")[1:3],
                  RColorBrewer::brewer.pal(3, "Greens")[3],
-                 RColorBrewer::brewer.pal(4, "Reds")[4])
+                 RColorBrewer::brewer.pal(4, "Reds")[4],
+                 RColorBrewer::brewer.pal(6, "Purples"),
+                 "white")
                  
   
 # Plot area data
@@ -368,10 +385,11 @@ g4 <- ggplot(adata, aes(x=perc, y=comm_name, fill=area)) +
   labs(x="Percent of quota", y="", title="Area allocations", tag="D") +
   scale_x_continuous(labels=scales::percent_format()) +
   # Legend
-  scale_fill_manual(name="Area                         ", values=area_colors) +
+  scale_fill_manual(name="Area", values=area_colors) +
   # Theme
   theme_bw() + my_theme +
   theme(plot.margin=margin(t=0, r=2, b=2, l=4),
+        legend.margin=margin(l=-2, r=0, t=0, b=0),
         legend.title=element_text(size=7, margin=margin(b = 2, unit = "pt")))
 g4
  
@@ -384,6 +402,9 @@ g <- gridExtra::grid.arrange(g2, g3, g4, ncol=1)
 
 # Merge all
 top_h <- 0.23
+nrows <- c(7, 6, 13)
+bottom3_h <- (1-top_h) * (nrows/sum(nrows))
+heights <- c(top_h, bottom3_h)
 layout_matrix <- matrix(data=c(1,1,
                                2,3,
                                4,5,
@@ -392,7 +413,7 @@ g_out <- gridExtra::grid.arrange(g1,
                                  g2, g5,
                                  g3, g6,
                                  g4, g7, layout_matrix=layout_matrix,
-                                 heights=c(top_h, rep((1-top_h)/3, 3)),
+                                 heights=heights,
                                  widths=c(0.6, 0.4))
 
 # Export

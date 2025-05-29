@@ -134,9 +134,9 @@ g <- gridExtra::grid.arrange(g1, g2, nrow=1, widths=c(0.6,0.4))
 ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.png"),
        width=6.5, height=5, units="in", dpi=600)
 ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.pdf"),
-       width=6.5, height=3.5, units="in", dpi=600)
+       width=6.5, height=5, units="in", dpi=600)
 ggsave(g, filename=file.path(plotdir, "Fig8_seasonal_allocations.tiff"),
-       width=6.5, height=3.5, units="in", dpi=600)
+       width=6.5, height=5, units="in", dpi=600)
 
 
 
