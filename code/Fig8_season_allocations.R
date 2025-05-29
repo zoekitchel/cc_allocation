@@ -15,7 +15,7 @@ plotdir <- "figures"
 
 # Read data
 data_orig <- readxl::read_excel(file.path(datadir, "season_allocation_database.xlsx"))
-
+data_yrs_orig <- readxl::read_excel(file.path(datadir, "season_allocation_database.xlsx"), sheet=2)
 
 # Build data
 ################################################################################
@@ -24,10 +24,12 @@ data_orig <- readxl::read_excel(file.path(datadir, "season_allocation_database.x
 data <- data_orig %>% 
   # Factor council
   mutate(council=recode_factor(council, 
+                               "Atlantic HMS"="Atlantic HMS",
                                "New England"="New England", 
                                "Mid-Atlantic"="Mid-Atlantic", 
                                "South Atlantic"="South Atlantic", 
-                               "Pacific"="Pacific")) %>% 
+                               "Pacific"="Pacific",
+                               "North Pacific"="North Pacific")) %>% 
   # Format date
   mutate(start=lubridate::ymd(start),
          end=lubridate::ymd(end)) %>% 
@@ -64,7 +66,7 @@ my_theme <-  theme(axis.text=element_text(size=8),
                    legend.background = element_rect(fill=alpha('blue', 0)))
 
 # Plot data
-g <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end, 
+g1 <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end, 
                               linewidth=percent, color=percent)) + 
   facet_grid(council~., space="free_y", scales="free_y") +
   geom_segment() +
@@ -81,14 +83,30 @@ g <- ggplot(data, mapping=aes(y=reorder(species, order), x=start, xend=end,
   scale_color_gradientn(name="% of quota", 
                         colors=RColorBrewer::brewer.pal(9, "Spectral") %>% rev(),
                         labels=scales::percent_format()) +
-  guides(color = guide_colorbar(ticks.colour = "black", frame.colour = "black", frame.linewidth = 0.2)) +
+  guides(size=guide_legend(order=1),
+         color = guide_colorbar(ticks.colour = "black", frame.colour = "black", frame.linewidth = 0.2, order=2)) +
   # Labels
   labs(x="", y="") +
   # Theme
   theme_bw() + my_theme +
-  theme(legend.position = "right",
-        legend.key.size = unit(0.3, "cm"))
-g
+  theme(legend.position = "top",
+        legend.key.size = unit(0.5, "cm"))
+g1
+
+# Timeline
+g2 <- ggplot(data=data_yrs_orig, aes(x=year1, xend=year2, y=species)) +
+  facet_grid(council~., space="free_y", scales="free_y") +
+  geom_segment() +
+  # Labels
+  labs(x="Year", y="") +
+  # Axis
+  scale_x_continuous(breaks=seq(1980,2020, 10), lim=c(NA, 2020)) +
+  # Theme
+  theme_bw() + my_theme
+g2
+
+# Merge
+g <- gridExtra::grid.arrange(g1, g2, nrow=1)
 
 
 # Export

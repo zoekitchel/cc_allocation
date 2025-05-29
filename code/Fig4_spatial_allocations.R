@@ -33,7 +33,7 @@ transfer_stocks <- c("Bluefish - Atlantic Coast")
 # Build data
 data <- data_orig %>% 
   # Simplify columns
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, 
          spatial_yn:area_list) %>% 
   # Recode council
   mutate(council_lead=recode(council_lead,
@@ -129,20 +129,27 @@ data_yrs_plot <- data_yrs %>%
                                "Mid-Atlantic"="Mid-Atlantic",
                                "South Atlantic"="South Atlantic",
                                "Gulf of Mexico"="GoM",
-                               "Pacific"="Pacific"))
+                               "Pacific"="Pacific")) %>% 
+  # Order basis
+  mutate(basis=factor(basis, levels=c("Landings", "Fish spotter", "CalCOFI larvae")))
 
-g5 <- ggplot(data_yrs_plot %>% filter(level=="country"), aes(y=comm_name, x=year1, xend=year2)) +
+g5 <- ggplot(data_yrs_plot %>% filter(level=="country"), aes(y=comm_name, x=year1, xend=year2, color=basis, group=basis)) +
   facet_grid(council~., space="free_y", scales="free_y") +
-  geom_segment() +
+  geom_segment(position = position_dodge2(width=0.5)) +
   # Text
-  geom_text(mapping=aes(y=comm_name, x=1965, label=notes), 
+  geom_text(mapping=aes(y=comm_name, x=1950, label=notes), 
             hjust=0, fontface="italic", color="grey60", size=2) +
   # Labels
   labs(x="Year", y="", title=" ", tag=" ") +
-  scale_x_continuous(lim=c(1965, 2020), breaks=seq(1960, 2020, 10)) +
+  scale_x_continuous(lim=c(1950, 2020), breaks=seq(1950, 2020, 10)) +
+  # Legend
+  scale_color_manual(name="Basis", values=c("black", "#DE2D26", "#74C476")) +
   # Theme
   theme_bw() + my_theme +
-  theme(axis.text.y = element_blank(),
+  theme(legend.position="top",
+        legend.margin = margin(t=0,b=-2,r=0,l=0),
+        legend.key.size = unit(0.2, "cm"),
+        axis.text.y = element_blank(),
         axis.title.x = element_blank())
 g5
 
@@ -150,11 +157,11 @@ g6 <- ggplot(data_yrs_plot %>% filter(level=="state"), aes(y=comm_name, x=year1,
   facet_grid(council~., space="free_y", scales="free_y") +
   geom_segment() +
   # Text
-  geom_text(mapping=aes(y=comm_name, x=1965, label=notes), 
+  geom_text(mapping=aes(y=comm_name, x=1950, label=notes), 
             hjust=0, fontface="italic", color="grey60", size=2) +
   # Labels
   labs(x="Year", y="", title=" ", tag=" ") +
-  scale_x_continuous(lim=c(1965, 2020), breaks=seq(1960, 2020, 10)) +
+  scale_x_continuous(lim=c(1950, 2020), breaks=seq(1950, 2020, 10)) +
   # Theme
   theme_bw() + my_theme +
   theme(axis.text.y = element_blank(),
@@ -165,11 +172,11 @@ g7 <- ggplot(data_yrs_plot %>% filter(level=="area"), aes(y=comm_name, x=year1, 
   facet_grid(council~., space="free_y", scales="free_y") +
   geom_segment() +
   # Text
-  geom_text(mapping=aes(y=comm_name, x=1965, label=notes), 
+  geom_text(mapping=aes(y=comm_name, x=1950, label=notes), 
             hjust=0, fontface="italic", color="grey60", size=2) +
   # Labels
   labs(x="Year", y="", title=" ", tag=" ") +
-  scale_x_continuous(lim=c(1965, 2020), breaks=seq(1960, 2020, 10)) +
+  scale_x_continuous(lim=c(1950, 2020), breaks=seq(1950, 2020, 10)) +
   # Theme
   theme_bw() + my_theme + 
   theme(axis.text.y = element_blank())
@@ -187,9 +194,9 @@ pdata <- data %>%
   # Filter
   filter(spatial_yn=="yes") %>% 
   # Simplify
-  select(council:area, country_list, state_list, area_list) %>% 
+  select(council:comm_name, country_list, state_list, area_list) %>% 
   # Gather
-  gather(key="type", value="values", 8:ncol(.)) %>% 
+  gather(key="type", value="values", 7:ncol(.)) %>% 
   # Reduce
   filter(grepl("%", values))
 
@@ -197,8 +204,8 @@ pdata <- data %>%
 cdata <- pdata %>% 
   filter(type=="country_list") %>% 
   separate(values, sep=", ", into=c("country1", "country2"), remove=T) 
-cdata1 <- cdata %>% select(council:area, country1) %>% rename(country=country1)
-cdata2 <- cdata %>% select(council:area, country2) %>% rename(country=country2)
+cdata1 <- cdata %>% select(council:comm_name, country1) %>% rename(country=country1)
+cdata2 <- cdata %>% select(council:comm_name, country2) %>% rename(country=country2)
 cdata3 <- bind_rows(cdata1, cdata2) %>% 
   separate(country, sep=" \\(", into=c("country", "perc")) %>% 
   mutate(perc=gsub("%\\)", "", perc) %>% as.numeric() / 100) %>% 
