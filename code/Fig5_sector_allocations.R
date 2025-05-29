@@ -19,7 +19,6 @@ data_orig <- readRDS(file.path(datadir, "quota_allocations_database.Rds"))
 # THINGS TO FIX IN DATABASE
 # Bluefish - three periods
 # South Atlantic spanish mackerel - but updated
-# Atlantic bluefin tuna - just says commercial
 # South Atlantic complexes - don't provide percents
 # Alaska Chinook salmon - don't provide percents
 
@@ -30,16 +29,16 @@ data_orig <- readRDS(file.path(datadir, "quota_allocations_database.Rds"))
 # Build data
 data <- data_orig %>% 
   # Simplify columns
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, 
          sector_yn:sector_notes) %>% 
   # Reduce to stocks with sector allocations
   filter(sector_yn=="yes") %>% 
-  filter(council_lead!="PFMC") #### TEMPORARY!!! REMOVE!!! 
+  filter(council_lead!="PFMC") #### Removing because not totally certain about tribal allocations
   
 # Build percent data
 data_perc <- data %>% 
   # Simplify
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, 
          sector_list) %>% 
   # Separate sectors
   separate(sector_list, into=c("sector1_info", "sector2_info"), sep=", ", remove=T) %>% 
@@ -52,12 +51,12 @@ data_perc <- data %>%
   # Simplify
   rename(comm_perc=sector1_perc, 
          rec_perc=sector2_perc) %>% 
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area, comm_perc, rec_perc) %>% 
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, comm_perc, rec_perc) %>% 
   # Check
   mutate(check=comm_perc+rec_perc) %>% 
   select(-check) %>% 
   # Gather
-  gather(key="sector", value="percent", 8:9) %>% 
+  gather(key="sector", value="percent", 7:8) %>% 
   mutate(sector=recode_factor(sector,
                               "comm_perc"="Commercial",
                               "rec_perc"="Recreational")) 
@@ -100,11 +99,12 @@ data_perc_plot <- data_perc %>%
 # Build year data
 data_yrs <- data %>% 
   # Simplify
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, 
          sector_yrs) %>% 
   # Format years
   mutate(sector_yrs=case_when(sector_yrs=="not specified" ~ NA, 
                               sector_yrs=="based on stakeholder input" ~ NA,
+                              sector_yrs=="1981-2018, 2009-2018, 2014-2018" ~ "1981-2018, 2009-2018",
                               T ~ sector_yrs)) %>% 
   mutate(sector_yrs=gsub(", but updated", "", sector_yrs)) %>% 
   # Seperate blocks
@@ -114,10 +114,10 @@ data_yrs <- data %>%
   # Separate block 2
   separate(block2, into=c("block2_yr1", "block2_yr2"), sep="-", remove=F, convert = T) %>% 
   # Simplify
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name, 
          block1_yr1, block1_yr2, block2_yr1, block2_yr2) %>% 
   # Gather
-  gather(key="year_type", value="year", 8:ncol(.)) %>% 
+  gather(key="year_type", value="year", 7:ncol(.)) %>% 
   # Format
   mutate(period=ifelse(grepl("block1", year_type), "Period 1", "Period 2"),
          period_yr=ifelse(grepl("yr1", year_type), "year1", "year2")) %>% 
@@ -139,6 +139,11 @@ data_yrs_plot <- data_yrs %>%
                                     "GMFMC"="Gulf of\nMexico")) %>% 
   # Add rec percent
   left_join(data_perc_plot %>% select(stock_orig, rec_perc_rank) %>% unique(), by="stock_orig")
+
+data_yrs_labels <- data_yrs_plot %>% 
+  count(council_lead, stock, rec_perc_rank) %>% 
+  mutate(label=case_when(stock == "Wreckfish - Southern Atlantic Coast" ~ "Based on expert judgement",
+                         T ~ NA))
 
 
 # Plot data
@@ -189,6 +194,9 @@ g2 <- ggplot(data=data_yrs_plot, aes(y=tidytext::reorder_within(stock, desc(rec_
   facet_grid(council_lead~., space="free_y", scales="free_y") +
   # Plot lines
   geom_segment(mapping=aes(x=year1, xend=year2,  color=period)) +
+  # Plot labels
+  geom_text(data=data_yrs_labels, mapping=aes(label=label), x=1979,
+            fontface="italic", hjust=0, size=1.8, color="grey40") +
   # Labels
   labs(x="Year", y="", tag="B", title=" ") +
   tidytext::scale_y_reordered() +

@@ -23,7 +23,7 @@ data_orig <- readRDS(file.path(datadir, "quota_allocations_database.Rds"))
 # Build data
 data <- data_orig %>% 
   # Simplify columns
-  select(council, council_lead, fmp, stock_orig, stock, comm_name, area,
+  select(council, council_lead, fmp, stock_orig, stock, comm_name,
          subsector_yn:subsector_list_rec) %>% 
   # Reduce to stocks with subsector allocations
   filter(subsector_yn=="yes") %>% 
@@ -54,7 +54,7 @@ stats <- data %>%
   # Order type by frequency
   mutate(subsector_type=stringr::str_to_sentence(subsector_type),
          subsector_type=gsub("Cs", "CS", subsector_type),
-         subsector_type=factor(subsector_type, levels=c("CS program participation", "Gears", 
+         subsector_type=factor(subsector_type, levels=c("Gears", "CS program participation", 
                                                         "End uses", "Target species", "Vessel tiers", "Recreational")))
 
 
@@ -102,7 +102,7 @@ g2 <- ggplot(data, aes(y=factor(council_lead, levels=levels(stats$council_lead))
 g2
 
 # Merge
-g <- gridExtra::grid.arrange(g1, g2, nrow=1)
+g <- gridExtra::grid.arrange(g1, g2, nrow=1, widths=c(0.6, 0.4))
 g
 
 # Export
