@@ -2,7 +2,7 @@
 
 This is the GitHub repository for the following peer reviewed paper and white paper:
 
-  * Free CM, Kitchel ZJ, Seeley M, Shields A (2025) [Quota allocation policies in U.S. federal fisheries management and implications for climate resilience](https://onlinelibrary.wiley.com/doi/10.1111/faf.70000). _Fish & Fisheries:_ 10.1111/faf.70000.
+  * Free CM, Kitchel ZJ, Seeley M, Shields A (2025) [Quota allocation policies in U.S. federal fisheries management and implications for climate resilience](https://onlinelibrary.wiley.com/doi/10.1111/faf.70000). _Fish & Fisheries:_ 26(5): 790-808.
   * Free CM, Kitchel ZJ, Seeley M, Shields A (2024) [Quota allocation policies in U.S. federal fisheries management and implications for climate resilience](https://library.edf.org/AssetLink/cx87t1n3aixl6i5206xj66p7cfu0mmxc.pdf). Environmental Defense Fund (EDF). 
 
 Please email Chris Free (cfree14@gmail.com) with any questions.
